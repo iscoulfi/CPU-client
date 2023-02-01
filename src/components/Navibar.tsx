@@ -1,22 +1,19 @@
 import { Link } from 'react-router-dom';
 import { TbLogout } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
-import { ThemeContext, themes } from '../theme/ThemeContext';
+import { ThemeContext } from '../theme/ThemeContext';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import LangSwitch from './UI/LangSwitch';
-
-// interface IContext {
-//   theme: string;
-//   setTheme: any;
-// }
+import { useContext } from 'react';
 
 const Navibar = () => {
+  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { t } = useTranslation();
   //fix
   const isAuth = true;
-  const { t } = useTranslation();
   return (
     <Navbar className="navibar rounded-top" expand="md" sticky="top">
       <Container className="justify-content-between ">
@@ -45,19 +42,12 @@ const Navibar = () => {
           />
           <LangSwitch />
 
-          <ThemeContext.Consumer>
-            {({ theme, setTheme }: any) => (
-              <Form.Check
-                type="switch"
-                id="switch"
-                checked={theme === themes.dark}
-                onChange={() => {
-                  if (theme === themes.light) setTheme(themes.dark);
-                  if (theme === themes.dark) setTheme(themes.light);
-                }}
-              />
-            )}
-          </ThemeContext.Consumer>
+          <Form.Check
+            type="switch"
+            id="switch"
+            checked={theme === 'dark'}
+            onChange={toggleTheme}
+          />
 
           {isAuth ? (
             <TbLogout className="logout my-1" />
