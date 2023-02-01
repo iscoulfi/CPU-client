@@ -1,0 +1,40 @@
+@import '~bootstrap/scss/bootstrap';
+@import './components/navbar';
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+a {
+  text-decoration: none;
+}
+
+ul,
+ol,
+li {
+  list-style: none;
+}
+
+img {
+  vertical-align: top;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  background-color: #d7d7d7;
+  font-family: 'Nunito', sans-serif;
+}
+
+.app {
+  position: relative;
+  max-width: 1200px;
+  background-color: #e9e9e9;
+  border-radius: 5px;
+  margin: 15px auto;
+}

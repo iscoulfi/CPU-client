@@ -1,0 +1,39 @@
+.navibar {
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    margin: 0;
+  }
+  p {
+    margin: 0;
+  }
+  a {
+    text-decoration: none;
+    color: #428bff;
+    gap: 10px;
+    &:hover {
+      color: #424cff;
+    }
+  }
+
+  @include media-breakpoint-down(lg) {
+    h1,
+    p {
+      display: none;
+    }
+  }
+
+  .search {
+    max-width: 350px;
+    margin-right: 50px;
+  }
+}
+
+.logout {
+  color: #428bff;
+  width: 25px;
+  height: 25px;
+  &:hover {
+    color: #7e1111;
+  }
+}
