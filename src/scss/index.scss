@@ -27,14 +27,30 @@ body {
 }
 
 body {
-  background-color: #d7d7d7;
   font-family: 'Nunito', sans-serif;
 }
 
 .app {
   position: relative;
   max-width: 1200px;
-  background-color: #e9e9e9;
-  border-radius: 5px;
+  border-radius: 7px;
   margin: 15px auto;
+}
+
+:root[data-theme='light'] {
+  body {
+    background-color: #d7d7d7;
+  }
+  .app {
+    background-color: #e9e9e9;
+  }
+}
+
+:root[data-theme='dark'] {
+  body {
+    background-color: #2b3e51;
+  }
+  .app {
+    background-color: #3e3e42;
+  }
 }

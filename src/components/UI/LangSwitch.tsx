@@ -3,10 +3,13 @@ import { useTranslation } from 'react-i18next';
 
 const LangSwitch = () => {
   const { i18n } = useTranslation();
-  const [activeLang, setActiveLang] = useState('en');
+  const [activeLang, setActiveLang] = useState(
+    localStorage.getItem('language') || 'en'
+  );
 
   const changeLanguage = (language: string) => {
     i18n.changeLanguage(language);
+    localStorage.setItem('language', language);
   };
 
   return (
