@@ -5,7 +5,7 @@ export enum Status {
 }
 
 export interface AuthSliceState {
-  user: string;
+  user: null;
   token: string;
   message: string;
   status: Status;

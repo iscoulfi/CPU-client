@@ -4,7 +4,7 @@ import { registerUser, loginUser, getMe } from './asyncActions';
 import { Status, AuthSliceState, MessageType } from './types';
 
 const initialState: AuthSliceState = {
-  user: '',
+  user: null,
   token: '',
   message: '',
   status: Status.LOADING, // loading | success | error
@@ -15,7 +15,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     logout: state => {
-      state.user = '';
+      state.user = null;
       state.token = '';
       state.message = '';
       state.status = Status.LOADING;
