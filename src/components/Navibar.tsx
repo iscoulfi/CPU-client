@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { TbLogout } from 'react-icons/tb';
 import { useTranslation } from 'react-i18next';
 import { ThemeContext } from '../theme/ThemeContext';
@@ -8,12 +8,16 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import LangSwitch from './UI/LangSwitch';
 import { useContext } from 'react';
+import { checkIsAuth, logout } from '../redux/slices/auth/slice';
+import { useAppSelector, useAppDispatch } from '../redux/store';
 
 const Navibar = () => {
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const isAuth = useAppSelector(checkIsAuth);
   const { theme, toggleTheme } = useContext(ThemeContext);
   const { t } = useTranslation();
-  //fix
-  const isAuth = true;
+
   return (
     <Navbar className="navibar rounded-top" expand="md" sticky="top">
       <Container className="justify-content-between ">
@@ -27,7 +31,7 @@ const Navibar = () => {
               alt="logo"
             />
           </div>
-          <div className=" d-flex flex-column">
+          <div className="d-flex flex-column title">
             <h1>{t('Home')}</h1>
             <p>{t('Your personal collections')}</p>
           </div>
@@ -50,11 +54,26 @@ const Navibar = () => {
           />
 
           {isAuth ? (
-            <TbLogout className="logout my-1" />
+            <TbLogout
+              className="logout my-1"
+              onClick={() => {
+                dispatch(logout());
+                window.localStorage.removeItem('token');
+              }}
+            />
           ) : (
             <>
-              <Button variant="outline-primary">{t('Sign in')}</Button>
-              <Button variant="outline-primary" className="ms-2">
+              <Button
+                variant="outline-primary"
+                onClick={() => navigate('/login')}
+              >
+                {t('Sign in')}
+              </Button>
+              <Button
+                variant="outline-primary"
+                onClick={() => navigate('/registr')}
+                className="ms-2"
+              >
                 {t('Sign up')}
               </Button>
             </>
