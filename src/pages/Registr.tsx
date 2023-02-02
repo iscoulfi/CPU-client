@@ -1,14 +1,22 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { useState, useEffect, FormEvent } from 'react';
+import { useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from '../redux/store';
 import { checkIsAuth, reduceMessage } from '../redux/slices/auth/slice';
 import { registerUser } from '../redux/slices/auth/asyncActions';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+
+type Inputs = {
+  username: string;
+  email: string;
+  password: string;
+};
 
 const Registr = () => {
-  const [data, setData] = useState({ username: '', email: '', password: '' });
   const dispatch = useAppDispatch();
-  const isAuth = useAppSelector(checkIsAuth);
   const navigate = useNavigate();
+  const isAuth = useAppSelector(checkIsAuth);
   const { message } = useAppSelector(state => state.auth);
 
   useEffect(() => {
@@ -16,19 +24,9 @@ const Registr = () => {
     dispatch(reduceMessage());
   }, [isAuth, navigate, message, dispatch]);
 
-  function handleFormSubmit(event: FormEvent) {
-    event.preventDefault();
-    try {
-      dispatch(registerUser({ ...data }));
-      if (isAuth) setData({ username: '', email: '', password: '' });
-    } catch (e) {
-      console.log(e);
-    }
-  }
-
-  function handleInputChange(text: string, name: string) {
-    setData({ ...data, [name]: text });
-  }
+  const { register, handleSubmit } = useForm<Inputs>();
+  const onSubmit: SubmitHandler<Inputs> = data =>
+    dispatch(registerUser({ ...data }));
 
   return (
     <section className="text-center ">
@@ -36,57 +34,45 @@ const Registr = () => {
         <div className=" row d-flex justify-content-center">
           <div className="auth">
             <h2 className="fw-bold mb-5">Sign up</h2>
-            <form onSubmit={handleFormSubmit}>
-              {/* Username input */}
-              <div className="form-outline mb-4">
-                <input
-                  type="username"
-                  className="form-control"
-                  value={data.username}
-                  onChange={event =>
-                    handleInputChange(event.target.value, 'username')
-                  }
+            <Form onSubmit={handleSubmit(onSubmit)}>
+              <Form.Group className="mb-3">
+                <Form.Control
+                  type="text"
+                  placeholder="Enter username"
+                  {...register('username')}
+                  autoComplete="off"
                 />
-                <label className="form-label">Username</label>
-              </div>
+                <Form.Label>Username</Form.Label>
+              </Form.Group>
 
-              {/* Email input */}
-              <div className="form-outline mb-4">
-                <input
+              <Form.Group className="mb-3">
+                <Form.Control
                   type="email"
-                  className="form-control"
-                  value={data.email}
-                  onChange={event =>
-                    handleInputChange(event.target.value, 'email')
-                  }
+                  placeholder="Enter email"
+                  {...register('email')}
+                  autoComplete="off"
                 />
-                <label className="form-label">Email address</label>
-              </div>
+                <Form.Label>Email address</Form.Label>
+              </Form.Group>
 
-              {/* Password input */}
-              <div className="form-outline mb-4">
-                <input
+              <Form.Group className="mb-3">
+                <Form.Control
                   type="password"
-                  className="form-control"
-                  value={data.password}
-                  onChange={event =>
-                    handleInputChange(event.target.value, 'password')
-                  }
+                  placeholder="Password"
+                  {...register('password')}
                 />
-                <label className="form-label">Password</label>
-              </div>
-
-              {/* Submit button */}
-              <button type="submit" className="btn btn-primary btn-block mb-4">
+                <Form.Label>Password</Form.Label>
+              </Form.Group>
+              <Button variant="primary" type="submit" className="mb-4">
                 Sign up
-              </button>
+              </Button>
               <p>
                 Already registered{' '}
                 <Link to="/login" className="text-decoration-none">
                   sign in?
                 </Link>
               </p>
-            </form>
+            </Form>
           </div>
         </div>
       </div>
