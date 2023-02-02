@@ -5,7 +5,7 @@ export enum Status {
 }
 
 export interface AuthSliceState {
-  user: null;
+  user: null | UserData;
   token: string;
   message: string;
   status: Status;
@@ -25,16 +25,28 @@ export type MessageType = {
   message: string;
 };
 
-// interface newUserData {
-//   _id: string;
-//   username: string;
-//   email: string;
-//   password: string;
-//   roles: ['string'];
-// }
+export interface UserData {
+  _id: string;
+  username: string;
+  email: string;
+  password: string;
+  roles: ['string'];
+}
 
-// export interface RegisterUserData {
-//   newUser: newUserData;
-//   token: string;
-//   message: string;
-// }
+interface IUserData {
+  token: string;
+  message: string;
+}
+
+export interface RegisterUserData extends IUserData {
+  newUser: UserData;
+}
+
+export interface LoginUserData extends IUserData {
+  user: UserData;
+}
+
+export interface GetMeData {
+  user: UserData;
+  token: string;
+}

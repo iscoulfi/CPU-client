@@ -1,12 +1,18 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { RegisterUserParams, LoginUserParams } from './types';
+import {
+  RegisterUserParams,
+  LoginUserParams,
+  RegisterUserData,
+  LoginUserData,
+  GetMeData,
+} from './types';
 import axios from '../../../utils/axios';
 
 export const registerUser = createAsyncThunk(
   'auth/registerUser',
   async ({ username, email, password }: RegisterUserParams) => {
     try {
-      const { data } = await axios.post('/auth/register', {
+      const { data } = await axios.post<RegisterUserData>('/auth/register', {
         username,
         email,
         password,
@@ -28,7 +34,7 @@ export const loginUser = createAsyncThunk(
   'auth/loginUser',
   async ({ username, password }: LoginUserParams) => {
     try {
-      const { data } = await axios.post('/auth/login', {
+      const { data } = await axios.post<LoginUserData>('/auth/login', {
         username,
         password,
       });
@@ -47,7 +53,7 @@ export const loginUser = createAsyncThunk(
 
 export const getMe = createAsyncThunk('auth/getMe', async () => {
   try {
-    const { data } = await axios.get('/auth/me');
+    const { data } = await axios.get<GetMeData>('/auth/me');
 
     return data;
   } catch (error) {

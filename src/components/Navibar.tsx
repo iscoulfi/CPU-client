@@ -58,7 +58,9 @@ const Navibar = () => {
               className="logout my-1"
               onClick={() => {
                 dispatch(logout());
-                window.localStorage.removeItem('token');
+                ['token', 'role'].forEach(item =>
+                  localStorage.removeItem(item)
+                );
               }}
             />
           ) : (

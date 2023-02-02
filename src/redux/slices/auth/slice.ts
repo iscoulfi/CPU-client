@@ -53,10 +53,12 @@ export const authSlice = createSlice({
     });
 
     builder.addCase(loginUser.fulfilled, (state, action) => {
-      state.message = action.payload.message;
-      state.user = action.payload.user;
-      state.token = action.payload.token;
-      state.status = Status.SUCCESS;
+      if (action.payload) {
+        state.message = action.payload.message;
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.status = Status.SUCCESS;
+      }
     });
 
     builder.addCase(loginUser.rejected, (state, action) => {
@@ -71,10 +73,12 @@ export const authSlice = createSlice({
     });
 
     builder.addCase(getMe.fulfilled, (state, action) => {
-      state.message = '';
-      state.user = action.payload?.user;
-      state.token = action.payload?.token;
-      state.status = Status.SUCCESS;
+      if (action.payload) {
+        state.message = '';
+        state.user = action.payload.user;
+        state.token = action.payload.token;
+        state.status = Status.SUCCESS;
+      }
     });
 
     builder.addCase(getMe.rejected, (state, action) => {
