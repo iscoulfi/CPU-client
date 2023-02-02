@@ -20,7 +20,7 @@ export const registerUser = createAsyncThunk(
 
       if (data.token) {
         window.localStorage.setItem('token', data.token);
-        window.localStorage.setItem('id', data.newUser.roles[0]);
+        window.localStorage.setItem('role', data.newUser.roles[0]);
       }
 
       return data;
