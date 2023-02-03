@@ -29,6 +29,7 @@ export const authSlice = createSlice({
     //Register
     builder.addCase(registerUser.pending, state => {
       state.message = '';
+      state.status = Status.LOADING;
     });
 
     builder.addCase(registerUser.fulfilled, (state, action) => {
@@ -36,16 +37,19 @@ export const authSlice = createSlice({
         state.message = action.payload.message;
         state.user = action.payload.newUser;
         state.token = action.payload.token;
+        state.status = Status.SUCCESS;
       }
     });
 
     builder.addCase(registerUser.rejected, (state, action) => {
       state.message = (action.payload as MessageType).message;
+      state.status = Status.ERROR;
     });
 
     //Login
     builder.addCase(loginUser.pending, state => {
       state.message = '';
+      state.status = Status.LOADING;
     });
 
     builder.addCase(loginUser.fulfilled, (state, action) => {
@@ -53,11 +57,13 @@ export const authSlice = createSlice({
         state.message = action.payload.message;
         state.user = action.payload.user;
         state.token = action.payload.token;
+        state.status = Status.SUCCESS;
       }
     });
 
     builder.addCase(loginUser.rejected, (state, action) => {
       state.message = (action.payload as MessageType).message;
+      state.status = Status.ERROR;
     });
 
     // Check auth

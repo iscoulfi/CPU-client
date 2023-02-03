@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from '../redux/store';
 import { checkIsAuth, reduceMessage } from '../redux/slices/auth/slice';
 import { registerUser } from '../redux/slices/auth/asyncActions';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
@@ -24,9 +25,24 @@ const Registr = () => {
     dispatch(reduceMessage());
   }, [isAuth, navigate, message, dispatch]);
 
+  const validation = ({ username, email, password }: Inputs) => {
+    if (username.length < 3) {
+      return toast.error('Username must be at least 3 characters long');
+    }
+    if (email.length === 0) {
+      return toast.error('Enter e-mail');
+    }
+    if (password.length < 5) {
+      return toast.error('Password must be at least 5 characters long');
+    }
+    return;
+  };
+
   const { register, handleSubmit } = useForm<Inputs>();
-  const onSubmit: SubmitHandler<Inputs> = data =>
+  const onSubmit: SubmitHandler<Inputs> = data => {
+    if (validation(data)) return;
     dispatch(registerUser({ ...data }));
+  };
 
   return (
     <section className="text-center ">
