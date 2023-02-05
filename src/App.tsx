@@ -10,7 +10,7 @@ import RingLoader from 'react-spinners/RingLoader';
 import MainLayout from './layouts/MainLayout';
 import NotFound from './pages/NotFound';
 import HomePage from './pages/HomePage';
-import PersonalPage from './pages/PersonalPage';
+import MyPage from './pages/MyPage';
 import Login from './pages/Login';
 import Registr from './pages/Registr';
 
@@ -26,6 +26,7 @@ function App() {
     if (message) toast.info(message);
   }, [message]);
 
+  console.log('render');
   return (
     <>
       {status !== 'loading' ? (
@@ -35,10 +36,10 @@ function App() {
               <Routes>
                 <Route path="/" element={<MainLayout />}>
                   <Route index element={<HomePage />} />
-                  <Route path="personal" element={<PersonalPage />} />
+                  <Route path="personal" element={<MyPage />} />
+                  <Route path="login" element={<Login />} />
+                  <Route path="registr" element={<Registr />} />
                 </Route>
-                <Route path="login" element={<Login />} />
-                <Route path="registr" element={<Registr />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
               <ToastContainer autoClose={2500} />
