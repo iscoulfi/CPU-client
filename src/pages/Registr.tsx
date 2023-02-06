@@ -4,7 +4,6 @@ import { useAppSelector, useAppDispatch } from '../redux/store';
 import { checkIsAuth, reduceMessage } from '../redux/slices/auth/slice';
 import { registerUser } from '../redux/slices/auth/asyncActions';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
@@ -25,22 +24,12 @@ const Registr = () => {
     dispatch(reduceMessage());
   }, [isAuth, navigate, message, dispatch]);
 
-  const validation = ({ username, email, password }: Inputs) => {
-    if (username.length < 3) {
-      return toast.error('Username must be at least 3 characters long');
-    }
-    if (email.length === 0) {
-      return toast.error('Enter e-mail');
-    }
-    if (password.length < 5) {
-      return toast.error('Password must be at least 5 characters long');
-    }
-    return;
-  };
-
-  const { register, handleSubmit } = useForm<Inputs>();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<Inputs>();
   const onSubmit: SubmitHandler<Inputs> = data => {
-    if (validation(data)) return;
     dispatch(registerUser({ ...data }));
   };
 
@@ -55,29 +44,50 @@ const Registr = () => {
                 <Form.Control
                   type="text"
                   placeholder="Enter username"
-                  {...register('username')}
+                  {...register('username', { required: true, minLength: 3 })}
                   autoComplete="off"
+                  isInvalid={!!errors.username}
                 />
-                <Form.Label>Username</Form.Label>
+                {errors.username ? (
+                  <span style={{ color: 'red' }}>
+                    Username must be at least 3 characters long
+                  </span>
+                ) : (
+                  <span>Username</span>
+                )}
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Control
                   type="email"
-                  placeholder="Enter email"
-                  {...register('email')}
+                  placeholder="Enter e-mail"
+                  {...register('email', {
+                    required: true,
+                  })}
                   autoComplete="off"
+                  isInvalid={!!errors.email}
                 />
-                <Form.Label>Email address</Form.Label>
+                {errors.email ? (
+                  <span style={{ color: 'red' }}>Enter e-mail</span>
+                ) : (
+                  <span>E-mail</span>
+                )}
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Control
                   type="password"
                   placeholder="Password"
-                  {...register('password')}
+                  {...register('password', { required: true, minLength: 5 })}
+                  isInvalid={!!errors.password}
                 />
-                <Form.Label>Password</Form.Label>
+                {errors.password ? (
+                  <span style={{ color: 'red' }}>
+                    Password must be at least 5 characters long
+                  </span>
+                ) : (
+                  <span>Password</span>
+                )}
               </Form.Group>
               <Button variant="primary" type="submit" className="mb-4">
                 Sign up

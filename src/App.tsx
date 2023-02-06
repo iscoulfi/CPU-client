@@ -13,6 +13,7 @@ import HomePage from './pages/HomePage';
 import MyPage from './pages/MyPage';
 import Login from './pages/Login';
 import Registr from './pages/Registr';
+import AddColl from './pages/AddColl';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -26,7 +27,6 @@ function App() {
     if (message) toast.info(message);
   }, [message]);
 
-  console.log('render');
   return (
     <>
       {status !== 'loading' ? (
@@ -37,6 +37,7 @@ function App() {
                 <Route path="/" element={<MainLayout />}>
                   <Route index element={<HomePage />} />
                   <Route path="personal" element={<MyPage />} />
+                  <Route path="personal/addcoll" element={<AddColl />} />
                   <Route path="login" element={<Login />} />
                   <Route path="registr" element={<Registr />} />
                 </Route>

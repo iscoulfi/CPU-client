@@ -24,7 +24,7 @@ const Navibar = () => {
         <Link to="." className="d-flex align-items-center ">
           <div>
             <img
-              src="./img/logo.svg"
+              src="../img/logo.svg"
               width="35"
               height="35"
               className="d-inline-block  my-1"
