@@ -7,9 +7,9 @@ export const options: IOption[] = [
 ];
 
 export const fields: IOption[] = [
-  { value: 'num1', label: 'Number' },
-  { value: 'num2', label: 'Number' },
-  { value: 'num3', label: 'Number' },
+  { value: 'number1', label: 'Number' },
+  { value: 'number2', label: 'Number' },
+  { value: 'number3', label: 'Number' },
   { value: 'string1', label: 'String' },
   { value: 'string2', label: 'String' },
   { value: 'string3', label: 'String' },

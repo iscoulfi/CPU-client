@@ -10,10 +10,12 @@ import RingLoader from 'react-spinners/RingLoader';
 import MainLayout from './layouts/MainLayout';
 import NotFound from './pages/NotFound';
 import HomePage from './pages/HomePage';
-import MyPage from './pages/MyPage';
+import MyPage from './pages/MyPage/MyPage';
 import Login from './pages/Login';
 import Registr from './pages/Registr';
-import AddColl from './pages/AddColl';
+import AddColl from './pages/MyPage/AddColl';
+import Items from './components/MyPage/Items';
+import EditColl from './pages/MyPage/EditColl';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -38,6 +40,8 @@ function App() {
                   <Route index element={<HomePage />} />
                   <Route path="personal" element={<MyPage />} />
                   <Route path="personal/addcoll" element={<AddColl />} />
+                  <Route path="personal/:id" element={<Items />} />
+                  {/* <Route path="personal/:id/edit" element={<EditColl />} /> */}
                   <Route path="login" element={<Login />} />
                   <Route path="registr" element={<Registr />} />
                 </Route>

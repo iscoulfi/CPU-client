@@ -26,3 +26,17 @@
   max-width: 500px;
   margin: auto;
 }
+
+.coll_img {
+  height: 150px;
+  width: 150px;
+  object-fit: cover;
+}
+
+.placeholder {
+  background-color: #428bff;
+}
+
+.modal-body {
+  padding: 0;
+}

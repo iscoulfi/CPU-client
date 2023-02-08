@@ -16,9 +16,9 @@ export interface IFields {
 }
 
 export type AdditionalFields = {
-  num1?: string;
-  num2?: string;
-  num3?: string;
+  number1?: string;
+  number2?: string;
+  number3?: string;
   string1?: string;
   string2?: string;
   string3?: string;
@@ -33,7 +33,7 @@ export type AdditionalFields = {
   checkbox3?: string;
 };
 
-export type CollInputs = AdditionalFields & {
+export type StandardCollFields = {
   title: string;
-  description: string;
 };
+export type CollInputs = AdditionalFields & StandardCollFields;

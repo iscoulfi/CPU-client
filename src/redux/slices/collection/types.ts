@@ -1,12 +1,18 @@
-import { AdditionalFields } from './../../../types/appinterface';
 import { Status } from './../auth/types';
 
 export interface createCollectionParams {
   title: string;
   topic: string;
-  description: string;
+  text: string;
   imgUrl: string;
-  adFields: AdditionalFields;
+  adFields: [string, string][];
+}
+
+export interface updateCollectionParams {
+  title: string;
+  text: string;
+  imgUrl: string;
+  id: string;
 }
 
 export interface CollectionData {
@@ -16,11 +22,15 @@ export interface CollectionData {
   imgUrl: string;
   adField: string;
   author: string;
-  message: string;
+  message?: string;
+  _id: string;
+  items: string[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface CollectionSliceState {
-  collection: null | CollectionData;
+  collections: [] | CollectionData[];
   message: string;
   status: Status;
 }

@@ -10,7 +10,7 @@ const initialState: AuthSliceState = {
   status: Status.IDLE, // idle | loading | success | error
 };
 
-export const authSlice = createSlice({
+const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {

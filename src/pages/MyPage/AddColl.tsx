@@ -1,26 +1,29 @@
-import { useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
-import { storage } from '../assets/firebase';
+import { storage } from '../../assets/firebase';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { AdditionalFields, CollInputs } from '../types/appinterface';
+import { CollInputs } from '../../types/appinterface';
 import { useNavigate } from 'react-router-dom';
-import { useAppDispatch } from '../redux/store';
+import { useAppDispatch } from '../../redux/store';
+import { createCollection } from '../../redux/slices/collection/asyncActions';
+import SimpleMDE from 'react-simplemde-editor';
+import MDE from 'easymde';
+import 'easymde/dist/easymde.min.css';
 import Button from 'react-bootstrap/Button';
-import FloatingLabel from 'react-bootstrap/esm/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import Field from '../components/MyPage/Field';
-import MultiField from '../components/MyPage/MultiField';
-import { createCollection } from '../redux/slices/collection/asyncActions';
+import Field from '../../components/MyPage/Field';
+import MultiField from '../../components/MyPage/MultiField';
 
 const fileTypes = ['JPG', 'PNG'];
 
-const Upload = () => {
+const AddColl = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [file, setFile] = useState<File | null>(null);
   const [topic, setTopic] = useState('books');
-  const [currentFields, setCurrentFields] = useState(['num1', 'string1']);
+  const [value, setValue] = useState('');
+  const [currentFields, setCurrentFields] = useState(['number1', 'string1']);
 
   const handleChange = (file: File) => {
     setFile(file);
@@ -32,9 +35,33 @@ const Upload = () => {
     formState: { errors },
   } = useForm<any>();
 
-  const handleFormSubmit: SubmitHandler<CollInputs> = async values => {
-    const { title, description, ...adFields } = values;
+  const onChange = useCallback((value: string) => {
+    setValue(value);
+  }, []);
 
+  const options = useMemo(() => {
+    return {
+      spellChecker: false,
+      maxHeight: '140px',
+      autofocus: true,
+      placeholder: 'Description...',
+      status: false,
+      toolbar: [
+        'bold',
+        'italic',
+        '|',
+        'unordered-list',
+        'ordered-list',
+        '|',
+        'guide',
+      ],
+    } as MDE.Options;
+  }, []);
+
+  const handleFormSubmit: SubmitHandler<CollInputs> = async values => {
+    const { title, ...additionals } = values;
+    const map = new Map(Object.entries(additionals));
+    const adFields = Array.from(map).filter(el => el[1] !== '');
     try {
       let imgUrl = '';
       if (file) {
@@ -42,12 +69,11 @@ const Upload = () => {
         const uploadImage = await uploadBytes(storageRef, file);
         imgUrl = await getDownloadURL(uploadImage.ref);
       }
-
       dispatch(
         createCollection({
           title,
           topic,
-          description,
+          text: value,
           imgUrl,
           adFields,
         })
@@ -80,19 +106,7 @@ const Upload = () => {
 
         <Field currentField={topic} setCurrentField={setTopic} />
 
-        <FloatingLabel
-          className="mb-3"
-          controlId="floatingTextarea2"
-          label="Description"
-        >
-          <Form.Control
-            as="textarea"
-            placeholder="Description"
-            style={{ height: '100px' }}
-            {...register('description', { required: true })}
-            isInvalid={!!errors.description}
-          />
-        </FloatingLabel>
+        <SimpleMDE value={value} onChange={onChange} options={options} />
 
         <MultiField
           currentFields={currentFields}
@@ -111,6 +125,13 @@ const Upload = () => {
           </Form.Group>
         ))}
 
+        <Button
+          variant="secondary"
+          onClick={() => navigate('/personal')}
+          className="mb-3 mx-2"
+        >
+          Cancel
+        </Button>
         <Button variant="secondary" type="submit" className="mb-3">
           Submit
         </Button>
@@ -119,4 +140,4 @@ const Upload = () => {
   );
 };
 
-export default Upload;
+export default AddColl;
