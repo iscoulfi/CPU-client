@@ -6,7 +6,7 @@ import {
 } from './types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../../utils/axios';
-import { refreshCollections, updateCollections } from './slice';
+import { refreshCollections } from './slice';
 
 export const createCollection = createAsyncThunk(
   'collection/createCollection',
@@ -15,7 +15,6 @@ export const createCollection = createAsyncThunk(
       const { data } = await axios.post<CollectionData>('/collections', {
         ...params,
       });
-
       return data;
     } catch (error) {
       console.log(error);
@@ -30,7 +29,18 @@ export const getMyCollections = createAsyncThunk(
       const { data } = await axios.get<CollectionData[]>(
         '/collections/user/me'
       );
+      return data;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
 
+export const getCollection = createAsyncThunk(
+  'collection/getCollection',
+  async (id: string) => {
+    try {
+      const { data } = await axios.get<CollectionData>(`/collections/${id}`);
       return data;
     } catch (error) {
       console.log(error);
@@ -40,17 +50,14 @@ export const getMyCollections = createAsyncThunk(
 
 export const updateCollection = createAsyncThunk(
   'collection/updateCollection',
-  async ({ id, title, text, imgUrl }: updateCollectionParams, { dispatch }) => {
+  async ({ id, title, text, imgUrl, adFields }: updateCollectionParams) => {
     try {
-      const { data } = await axios.put(`/collections/${id}`, {
+      const { data } = await axios.put<CollectionData>(`/collections/${id}`, {
         title,
         text,
         imgUrl,
+        adFields,
       });
-      if (data) {
-        dispatch(updateCollections(data));
-      }
-
       return data;
     } catch (error) {
       console.log(error);

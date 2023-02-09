@@ -41,7 +41,7 @@ function App() {
                   <Route path="personal" element={<MyPage />} />
                   <Route path="personal/addcoll" element={<AddColl />} />
                   <Route path="personal/:id" element={<Items />} />
-                  {/* <Route path="personal/:id/edit" element={<EditColl />} /> */}
+                  <Route path="personal/:id/edit" element={<EditColl />} />
                   <Route path="login" element={<Login />} />
                   <Route path="registr" element={<Registr />} />
                 </Route>

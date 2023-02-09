@@ -22,7 +22,7 @@ const AddColl = () => {
   const dispatch = useAppDispatch();
   const [file, setFile] = useState<File | null>(null);
   const [topic, setTopic] = useState('books');
-  const [value, setValue] = useState('');
+  const [value, setValue] = useState(' ');
   const [currentFields, setCurrentFields] = useState(['number1', 'string1']);
 
   const handleChange = (file: File) => {
@@ -86,6 +86,7 @@ const AddColl = () => {
 
   return (
     <div className="container message mb-5 mt-4">
+      <h1 className="form">Add collection</h1>
       <Form className="addcoll" onSubmit={handleSubmit(handleFormSubmit)}>
         <FileUploader
           handleChange={handleChange}
@@ -95,7 +96,7 @@ const AddColl = () => {
           classes="drop_area"
         />
 
-        <Form.Group className="my-3">
+        <Form.Group className="mt-3 mb-2">
           <Form.Control
             type="text"
             placeholder="Enter title"
@@ -106,7 +107,12 @@ const AddColl = () => {
 
         <Field currentField={topic} setCurrentField={setTopic} />
 
-        <SimpleMDE value={value} onChange={onChange} options={options} />
+        <SimpleMDE
+          value={value}
+          onChange={onChange}
+          options={options}
+          className="mb-2"
+        />
 
         <MultiField
           currentFields={currentFields}
@@ -128,11 +134,11 @@ const AddColl = () => {
         <Button
           variant="secondary"
           onClick={() => navigate('/personal')}
-          className="mb-3 mx-2"
+          className="mb-3 "
         >
           Cancel
         </Button>
-        <Button variant="secondary" type="submit" className="mb-3">
+        <Button variant="primary" type="submit" className="mb-3 mx-2">
           Submit
         </Button>
       </Form>

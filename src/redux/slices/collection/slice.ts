@@ -1,8 +1,9 @@
 import { Status, MessageType } from '../auth/types';
-import { CollectionSliceState, CollectionData } from './types';
+import { CollectionSliceState } from './types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import {
   createCollection,
+  getCollection,
   getMyCollections,
   removeCollection,
   updateCollection,
@@ -10,6 +11,7 @@ import {
 
 const initialState: CollectionSliceState = {
   collections: [],
+  collection: null,
   message: '',
   status: Status.IDLE, // idle | loading | success | error
 };
@@ -22,10 +24,6 @@ const collectionSlice = createSlice({
       state.collections = state.collections.filter(
         c => c._id !== action.payload
       );
-    },
-    updateCollections: (state, action: PayloadAction<CollectionData>) => {
-      const i = state.collections.findIndex(c => c._id === action.payload._id);
-      state.collections.splice(i, 1, action.payload);
     },
   },
 
@@ -82,16 +80,30 @@ const collectionSlice = createSlice({
     builder.addCase(updateCollection.fulfilled, (state, action) => {
       if (action.payload) {
         state.status = Status.SUCCESS;
-        state.message = action.payload.message;
+        state.collection = action.payload;
       }
     });
     builder.addCase(updateCollection.rejected, (state, action) => {
       state.message = (action.payload as MessageType).message;
       state.status = Status.ERROR;
     });
+
+    builder.addCase(getCollection.pending, state => {
+      state.message = '';
+      state.status = Status.LOADING;
+    });
+    builder.addCase(getCollection.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.status = Status.SUCCESS;
+        state.collection = action.payload;
+      }
+    });
+    builder.addCase(getCollection.rejected, (state, action) => {
+      state.message = (action.payload as MessageType).message;
+      state.status = Status.ERROR;
+    });
   },
 });
 
-export const { refreshCollections, updateCollections } =
-  collectionSlice.actions;
+export const { refreshCollections } = collectionSlice.actions;
 export default collectionSlice.reducer;

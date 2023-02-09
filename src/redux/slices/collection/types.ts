@@ -13,6 +13,7 @@ export interface updateCollectionParams {
   text: string;
   imgUrl: string;
   id: string;
+  adFields: [string, string][];
 }
 
 export interface CollectionData {
@@ -20,7 +21,7 @@ export interface CollectionData {
   topic: string;
   text: string;
   imgUrl: string;
-  adField: string;
+  adFields: [string, string][];
   author: string;
   message?: string;
   _id: string;
@@ -31,6 +32,7 @@ export interface CollectionData {
 
 export interface CollectionSliceState {
   collections: [] | CollectionData[];
+  collection: null | CollectionData;
   message: string;
   status: Status;
 }
