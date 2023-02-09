@@ -2,6 +2,7 @@
 @import './components/navbar';
 @import './components/auth';
 @import './components/mypage';
+@import './components/items';
 
 * {
   margin: 0;
@@ -24,6 +25,10 @@ body {
 
 body {
   font-family: 'Nunito', sans-serif;
+}
+
+table {
+  min-width: 700px;
 }
 
 .app {

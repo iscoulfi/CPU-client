@@ -37,3 +37,8 @@ export type StandardCollFields = {
   title: string;
 };
 export type CollInputs = AdditionalFields & StandardCollFields;
+
+export type ItemInputs = {
+  title: string;
+  tags: string;
+};

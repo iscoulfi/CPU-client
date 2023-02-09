@@ -85,7 +85,7 @@ const AddColl = () => {
   };
 
   return (
-    <div className="container message mb-5 mt-4">
+    <div className="container mb-5 mt-4">
       <h1 className="form">Add collection</h1>
       <Form className="addcoll" onSubmit={handleSubmit(handleFormSubmit)}>
         <FileUploader

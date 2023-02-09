@@ -50,8 +50,9 @@ const EditColl = () => {
   }, [collection, reset]);
 
   useEffect(() => {
-    dispatch(getCollection(params.id as string));
-  }, [dispatch, params.id]);
+    dispatch(getCollection(params.collId as string));
+  }, [dispatch, params.collId]);
+  console.log(params);
 
   const onChange = useCallback((value: string) => {
     setFValue(value);
