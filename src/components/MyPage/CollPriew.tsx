@@ -2,7 +2,7 @@ import { useAppDispatch } from '../../redux/store';
 import { removeCollection } from '../../redux/slices/collection/asyncActions';
 import { storage } from '../../assets/firebase';
 import { deleteObject, ref } from 'firebase/storage';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import Placeholder from 'react-bootstrap/Placeholder';
 import Accordion from 'react-bootstrap/Accordion';
@@ -15,6 +15,7 @@ interface CollPreviewParams {
 }
 
 const CollPriew = ({ collection, ind }: CollPreviewParams) => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
   const deleteCollection = (id: string, url: string) => {
@@ -49,12 +50,18 @@ const CollPriew = ({ collection, ind }: CollPreviewParams) => {
           </div>
         </div>
         <div className="my-2 gap-2 d-flex gap-2">
-          <Link to={`/personal/${collection._id}/edit`}>
-            <Button variant="primary">Edit</Button>
-          </Link>
-          <Link to={`/personal/${collection._id}`}>
-            <Button variant="primary">To items</Button>
-          </Link>
+          <Button
+            variant="primary"
+            onClick={() => navigate(`/personal/${collection._id}/edit`)}
+          >
+            Edit
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => navigate(`/personal/${collection._id}`)}
+          >
+            To items
+          </Button>
           <Button
             variant="danger "
             onClick={() => deleteCollection(collection._id, collection.imgUrl)}

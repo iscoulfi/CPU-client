@@ -34,11 +34,11 @@ export type AdditionalFields = {
 };
 
 export type StandardCollFields = {
-  title: string;
+  [title: string]: string;
 };
 export type CollInputs = AdditionalFields & StandardCollFields;
 
-export type ItemInputs = {
-  title: string;
+export type ItemInputs = AdditionalFields & {
+  [title: string]: string;
   tags: string;
 };

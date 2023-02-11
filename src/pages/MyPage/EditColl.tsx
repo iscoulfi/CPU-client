@@ -18,7 +18,7 @@ import { useNavigate, useParams } from 'react-router';
 
 import MultiField from '../../components/MyPage/MultiField';
 import SimpleMDE from 'react-simplemde-editor';
-import MDE from 'easymde';
+import { options } from './AddColl';
 import 'easymde/dist/easymde.min.css';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
@@ -38,7 +38,7 @@ const EditColl = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<any>();
+  } = useForm<CollInputs>();
 
   useEffect(() => {
     if (collection) {
@@ -52,7 +52,6 @@ const EditColl = () => {
   useEffect(() => {
     dispatch(getCollection(params.collId as string));
   }, [dispatch, params.collId]);
-  console.log(params);
 
   const onChange = useCallback((value: string) => {
     setFValue(value);
@@ -64,25 +63,6 @@ const EditColl = () => {
       setCurrentFields(collection.adFields.map(el => el[0]));
     }
   }, [collection]);
-
-  const options = useMemo(() => {
-    return {
-      spellChecker: false,
-      maxHeight: '140px',
-      autofocus: true,
-      placeholder: 'Change description... (optional)',
-      status: false,
-      toolbar: [
-        'bold',
-        'italic',
-        '|',
-        'unordered-list',
-        'ordered-list',
-        '|',
-        'guide',
-      ],
-    } as MDE.Options;
-  }, []);
 
   const handleChange = (file: File) => {
     setFile(file);
@@ -105,7 +85,9 @@ const EditColl = () => {
   const handleFormSubmit: SubmitHandler<CollInputs> = async values => {
     const { title, ...additionals } = values;
     const map = new Map(Object.entries(additionals));
-    const adFields = Array.from(map).filter(el => el[1] !== '');
+    const adFields = Array.from(map).filter(el =>
+      (currentFields as string[]).includes(el[0])
+    );
     try {
       const imgUrl = await changeImage();
       if (collection)
@@ -136,13 +118,18 @@ const EditColl = () => {
           classes="drop_area"
         />
         <Form.Group className="my-3">
+          <Form.Label>Title</Form.Label>
           <Form.Control
             type="text"
             placeholder="Change title (optional)"
             {...register('title')}
           />
         </Form.Group>
-        <SimpleMDE value={value} onChange={onChange} options={options} />
+
+        <Form.Group>
+          <Form.Label>Description</Form.Label>
+          <SimpleMDE value={value} onChange={onChange} options={options} />
+        </Form.Group>
 
         <MultiField
           currentFields={currentFields}
@@ -151,6 +138,7 @@ const EditColl = () => {
 
         {currentFields.map(f => (
           <Form.Group className="mb-3" key={f}>
+            <Form.Label>{f.replace(/\d/g, '')}</Form.Label>
             <Form.Control
               type="text"
               placeholder={`Enter ${f.replace(/\d/g, '')} field name`}

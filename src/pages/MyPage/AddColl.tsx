@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { FileUploader } from 'react-drag-drop-files';
 import { storage } from '../../assets/firebase';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
@@ -17,6 +17,23 @@ import MultiField from '../../components/MyPage/MultiField';
 
 const fileTypes = ['JPG', 'PNG'];
 
+export const options = {
+  spellChecker: false,
+  maxHeight: '140px',
+  autofocus: true,
+  placeholder: '...',
+  status: false,
+  toolbar: [
+    'bold',
+    'italic',
+    '|',
+    'unordered-list',
+    'ordered-list',
+    '|',
+    'guide',
+  ],
+} as MDE.Options;
+
 const AddColl = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -33,35 +50,18 @@ const AddColl = () => {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<any>();
+  } = useForm<CollInputs>();
 
   const onChange = useCallback((value: string) => {
     setValue(value);
   }, []);
 
-  const options = useMemo(() => {
-    return {
-      spellChecker: false,
-      maxHeight: '140px',
-      autofocus: true,
-      placeholder: 'Description...',
-      status: false,
-      toolbar: [
-        'bold',
-        'italic',
-        '|',
-        'unordered-list',
-        'ordered-list',
-        '|',
-        'guide',
-      ],
-    } as MDE.Options;
-  }, []);
-
   const handleFormSubmit: SubmitHandler<CollInputs> = async values => {
     const { title, ...additionals } = values;
     const map = new Map(Object.entries(additionals));
-    const adFields = Array.from(map).filter(el => el[1] !== '');
+    const adFields = Array.from(map).filter(el =>
+      currentFields.includes(el[0])
+    );
     try {
       let imgUrl = '';
       if (file) {
@@ -97,6 +97,7 @@ const AddColl = () => {
         />
 
         <Form.Group className="mt-3 mb-2">
+          <Form.Label>Title</Form.Label>
           <Form.Control
             type="text"
             placeholder="Enter title"
@@ -107,12 +108,15 @@ const AddColl = () => {
 
         <Field currentField={topic} setCurrentField={setTopic} />
 
-        <SimpleMDE
-          value={value}
-          onChange={onChange}
-          options={options}
-          className="mb-2"
-        />
+        <Form.Group>
+          <Form.Label>Description</Form.Label>
+          <SimpleMDE
+            value={value}
+            onChange={onChange}
+            options={options}
+            className="mb-2"
+          />
+        </Form.Group>
 
         <MultiField
           currentFields={currentFields}
@@ -121,6 +125,7 @@ const AddColl = () => {
 
         {currentFields.map(f => (
           <Form.Group className="mb-3" key={f}>
+            <Form.Label>{f.replace(/\d/g, '')}</Form.Label>
             <Form.Control
               type="text"
               placeholder={`Enter ${f.replace(/\d/g, '')} field name`}

@@ -11,6 +11,7 @@ const Items = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [checkedItemId, setCheckedItemId] = useState('');
+  const [activeCheckbox, setActiveCheckbox] = useState<null | number>(null);
 
   const { collection } = useAppSelector(state => state.collection);
 
@@ -19,7 +20,11 @@ const Items = () => {
   }, [dispatch, collId]);
 
   const deleteItem = (itemId: string) => {
-    if (collId) dispatch(removeItem({ itemId, collId }));
+    if (collId) {
+      dispatch(removeItem({ itemId, collId }));
+      setActiveCheckbox(null);
+      setCheckedItemId('');
+    }
   };
 
   return (
@@ -71,7 +76,11 @@ const Items = () => {
             </Button>
           </div>
 
-          <TableItems setCheckedItemId={setCheckedItemId} />
+          <TableItems
+            setCheckedItemId={setCheckedItemId}
+            activeCheckbox={activeCheckbox}
+            setActiveCheckbox={setActiveCheckbox}
+          />
         </div>
       ) : (
         <span>loading...</span>

@@ -6,13 +6,19 @@ import Table from 'react-bootstrap/Table';
 
 type TableParams = {
   setCheckedItemId: Dispatch<SetStateAction<string>>;
+  activeCheckbox: number | null;
+  setActiveCheckbox: Dispatch<SetStateAction<number | null>>;
 };
 
-const TableItems = ({ setCheckedItemId }: TableParams) => {
+const TableItems = ({
+  setCheckedItemId,
+  activeCheckbox,
+  setActiveCheckbox,
+}: TableParams) => {
   const { collId } = useParams();
   const dispatch = useAppDispatch();
   const { items } = useAppSelector(state => state.item);
-  const [activeCheckbox, setActiveCheckbox] = useState<null | number>(null);
+  const { collection } = useAppSelector(state => state.collection);
 
   useEffect(() => {
     dispatch(getCollectionItems(collId as string));
@@ -36,6 +42,9 @@ const TableItems = ({ setCheckedItemId }: TableParams) => {
           <th>Id</th>
           <th>Name</th>
           <th>Tags</th>
+          {collection?.adFields.map(el => (
+            <th key={el[0]}>{el[1]}</th>
+          ))}
         </tr>
       </thead>
       <tbody>
@@ -56,6 +65,9 @@ const TableItems = ({ setCheckedItemId }: TableParams) => {
             <td>{el._id}</td>
             <td>{el.title}</td>
             <td>{el.tags.map(tag => `#${tag} `)}</td>
+            {collection?.adFields.map(field => (
+              <td key={field[0]}>{el[field[0]]}</td>
+            ))}
           </tr>
         ))}
       </tbody>
