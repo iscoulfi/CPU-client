@@ -1,8 +1,9 @@
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { getCollectionItems } from '../../redux/slices/item/asyncActions';
 import { useParams } from 'react-router-dom';
-import { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { Dispatch, SetStateAction, useEffect } from 'react';
 import Table from 'react-bootstrap/Table';
+import ReactMarkdown from 'react-markdown';
 
 type TableParams = {
   setCheckedItemId: Dispatch<SetStateAction<string>>;
@@ -65,9 +66,21 @@ const TableItems = ({
             <td>{el._id}</td>
             <td>{el.title}</td>
             <td>{el.tags.map(tag => `#${tag} `)}</td>
-            {collection?.adFields.map(field => (
-              <td key={field[0]}>{el[field[0]]}</td>
-            ))}
+            {collection?.adFields
+              .filter(el => !el[0].includes('text'))
+              .map(field => (
+                <td key={field[0]}>{el[field[0]]}</td>
+              ))}
+            {collection?.adFields
+              .filter(el => el[0].includes('text'))
+              .map(field => (
+                <td key={field[0]}>
+                  <ReactMarkdown
+                    className="markfield"
+                    children={el[field[0]] as string}
+                  />
+                </td>
+              ))}
           </tr>
         ))}
       </tbody>

@@ -8,10 +8,10 @@ export interface ItemData extends Map {
   title: string;
   tags: string[];
   coll: string;
-  likes: string;
+  likes: any;
   comments: string[];
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
   message?: string;
   number1?: string;
   number2?: string;
@@ -32,6 +32,7 @@ export interface ItemData extends Map {
 
 export interface ItemSliceState {
   items: [] | ItemData[];
+  item: ItemData;
   message: string;
   status: Status;
 }

@@ -36,6 +36,7 @@ table {
   max-width: 1200px;
   border-radius: 7px;
   margin: 15px auto;
+  padding-bottom: 30px;
 }
 
 :root[data-theme='light'] {
@@ -54,5 +55,11 @@ table {
   }
   .app {
     background-color: #3e3e42;
+  }
+}
+
+.markfield {
+  p {
+    margin: 0;
   }
 }

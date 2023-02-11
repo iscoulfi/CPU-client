@@ -16,6 +16,15 @@ export const getCollectionItems = createAsyncThunk(
   }
 );
 
+export const getItem = createAsyncThunk('item/getItem', async (id: string) => {
+  try {
+    const { data } = await axios.get<ItemData>(`/items/${id}`);
+    return data;
+  } catch (error) {
+    console.log(error);
+  }
+});
+
 export const removeItem = createAsyncThunk(
   'item/removeItems',
   async ({ collId, itemId }: RemoveItemParams, { dispatch }) => {

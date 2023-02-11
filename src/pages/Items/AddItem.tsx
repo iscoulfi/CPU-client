@@ -2,16 +2,18 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from '../../utils/axios';
 import { ItemInputs } from '../../types/appinterface';
-import { useAppSelector } from '../../redux/store';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
 import SimpleMDE from 'react-simplemde-editor';
 import { options } from '../MyPage/AddColl';
 import 'easymde/dist/easymde.min.css';
+import { useCallback, useEffect, useState } from 'react';
+import { getCollection } from '../../redux/slices/collection/asyncActions';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
-import { useCallback, useEffect, useState } from 'react';
 
 const AddItem = () => {
   const { collId, itemId } = useParams();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [text1, setText1] = useState('');
   const [text2, setText2] = useState('');
@@ -40,9 +42,9 @@ const AddItem = () => {
 
   useEffect(() => {
     if (itemId) {
-      axios
-        .get(`/items/${itemId}`)
-        .then(({ data }) => {
+      (async () => {
+        try {
+          const { data } = await axios.get(`/items/${itemId}`);
           setText1(data.text1);
           setText2(data.text2);
           setText3(data.text3);
@@ -62,10 +64,10 @@ const AddItem = () => {
             checkbox2: data.checkbox2,
             checkbox3: data.checkbox3,
           });
-        })
-        .catch(e => {
+        } catch (e) {
           console.log(e);
-        });
+        }
+      })();
     }
   }, [reset, itemId]);
 
@@ -89,9 +91,14 @@ const AddItem = () => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    dispatch(getCollection(collId as string));
+  }, [dispatch, collId]);
+
   return (
     <div className="container mb-5 mt-4">
-      <h1 className="form">Add collection</h1>
+      <h1 className="form">{isEditing ? 'Edit item' : 'Add item'}</h1>
       <Form className="addcoll" onSubmit={handleSubmit(handleFormSubmit)}>
         <Form.Group className="mt-3 mb-2">
           <Form.Label>Title</Form.Label>

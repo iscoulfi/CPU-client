@@ -1,10 +1,21 @@
-import { ItemSliceState } from './types';
+import { ItemSliceState, ItemData } from './types';
 import { Status, MessageType } from '../auth/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getCollectionItems, removeItem } from './asyncActions';
+import { getCollectionItems, getItem, removeItem } from './asyncActions';
+
+const initialItem = {
+  _id: '',
+  title: '',
+  tags: [''],
+  coll: '',
+  likes: '',
+  comments: [''],
+  createdAt: '',
+};
 
 const initialState: ItemSliceState = {
   items: [],
+  item: initialItem,
   message: '',
   status: Status.IDLE, // idle | loading | success | error
 };
@@ -15,6 +26,9 @@ const itemSlice = createSlice({
   reducers: {
     refreshItems: (state, action: PayloadAction<string>) => {
       state.items = state.items.filter(c => c._id !== action.payload);
+    },
+    setItem: (state, action: PayloadAction<ItemData>) => {
+      state.item = action.payload;
     },
   },
 
@@ -30,6 +44,21 @@ const itemSlice = createSlice({
       }
     });
     builder.addCase(getCollectionItems.rejected, (state, action) => {
+      state.message = (action.payload as MessageType).message;
+      state.status = Status.ERROR;
+    });
+
+    builder.addCase(getItem.pending, state => {
+      state.message = '';
+      state.status = Status.LOADING;
+    });
+    builder.addCase(getItem.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.status = Status.SUCCESS;
+        state.item = action.payload;
+      }
+    });
+    builder.addCase(getItem.rejected, (state, action) => {
       state.message = (action.payload as MessageType).message;
       state.status = Status.ERROR;
     });
@@ -51,5 +80,5 @@ const itemSlice = createSlice({
   },
 });
 
-export const { refreshItems } = itemSlice.actions;
+export const { refreshItems, setItem } = itemSlice.actions;
 export default itemSlice.reducer;
