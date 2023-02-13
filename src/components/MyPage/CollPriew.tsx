@@ -8,6 +8,7 @@ import Placeholder from 'react-bootstrap/Placeholder';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 import { CollectionData } from '../../redux/slices/collection/types';
+import { removeItem } from '../../redux/slices/item/asyncActions';
 
 interface CollPreviewParams {
   collection: CollectionData;
@@ -18,11 +19,12 @@ const CollPriew = ({ collection, ind }: CollPreviewParams) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const deleteCollection = (id: string, url: string) => {
+  const deleteCollection = (id: string, url: string, items: string[]) => {
     if (url) {
       let fileRef = ref(storage, url);
       deleteObject(fileRef);
     }
+    items.forEach(i => dispatch(removeItem({ itemId: i, collId: id })));
     dispatch(removeCollection(id));
   };
 
@@ -64,7 +66,13 @@ const CollPriew = ({ collection, ind }: CollPreviewParams) => {
           </Button>
           <Button
             variant="danger "
-            onClick={() => deleteCollection(collection._id, collection.imgUrl)}
+            onClick={() =>
+              deleteCollection(
+                collection._id,
+                collection.imgUrl,
+                collection.items
+              )
+            }
           >
             Delete
           </Button>

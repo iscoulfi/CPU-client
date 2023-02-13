@@ -23,7 +23,7 @@ const commentSlice = createSlice({
   initialState,
   reducers: {
     refreshComments: (state, action: PayloadAction<CommentData>) => {
-      state.comments = [...state.comments, action.payload];
+      state.comments = [action.payload, ...state.comments];
     },
   },
 

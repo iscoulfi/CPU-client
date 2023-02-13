@@ -18,6 +18,7 @@ import Items from './pages/Items/Items';
 import EditColl from './pages/MyPage/EditColl';
 import AddItem from './pages/Items/AddItem';
 import Item from './pages/Items/Item';
+import SearchItem from './pages/SearchItem';
 
 function App() {
   const dispatch = useAppDispatch();
@@ -40,6 +41,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<MainLayout />}>
                   <Route index element={<HomePage />} />
+                  <Route path="search" element={<SearchItem />} />
                   <Route path="personal" element={<MyPage />} />
                   <Route path="personal/addcoll" element={<AddColl />} />
                   <Route path="personal/:collId" element={<Items />} />

@@ -42,11 +42,6 @@ function Comments() {
     formState: { errors },
   } = useForm<Comment>();
 
-  let reverseComments = [];
-  for (let i = comments.length - 1; i >= 0; i--) {
-    reverseComments.push(comments[i]);
-  }
-
   return (
     <>
       <div className="comment_form mt-2 shadow">
@@ -80,7 +75,7 @@ function Comments() {
           </div>
         </Form>
       </div>
-      {reverseComments.map((c: CommentData) => (
+      {comments.map((c: CommentData) => (
         <div className="comment_card mt-3 shadow" key={c._id}>
           <span className="fw-bold">
             {c.author} | {new Date(c.createdAt).toLocaleString()}
