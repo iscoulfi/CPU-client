@@ -30,10 +30,10 @@ const Navibar = ({ setItems }: NavibarProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isAuth = useAppSelector(checkIsAuth);
+  const [searchValue, setSearchValue] = useState('');
   const { theme, toggleTheme } = useContext(ThemeContext);
   const { t } = useTranslation();
   const { pathname } = useLocation();
-  const [searchValue, setSearchValue] = useState('');
 
   const updateSearchItems = useCallback(
     debounce(async (str: string) => {
