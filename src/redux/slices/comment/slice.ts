@@ -19,7 +19,7 @@ const initialState: CommentSliceState = {
 };
 
 const commentSlice = createSlice({
-  name: 'item',
+  name: 'comment',
   initialState,
   reducers: {
     refreshComments: (state, action: PayloadAction<CommentData>) => {
@@ -43,7 +43,7 @@ const commentSlice = createSlice({
     });
     builder.addCase(getItemComments.fulfilled, (state, action) => {
       state.status = Status.SUCCESS;
-      state.comments = action.payload;
+      if (action.payload) state.comments = action.payload;
     });
     builder.addCase(getItemComments.rejected, (state, action) => {
       state.status = Status.ERROR;

@@ -7,7 +7,7 @@ export type CreateCommentParams = {
 };
 
 export interface CommentSliceState {
-  comments: any;
+  comments: CommentData[];
   status: Status;
 }
 

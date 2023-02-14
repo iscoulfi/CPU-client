@@ -3,6 +3,7 @@ import collectionSlice from './slices/collection/slice';
 import authSlice from './slices/auth/slice';
 import itemSlice from './slices/item/slice';
 import commentSlice from './slices/comment/slice';
+import adminSlice from './slices/admin/slice';
 import { useDispatch, useSelector } from 'react-redux';
 import type { TypedUseSelectorHook } from 'react-redux';
 
@@ -12,6 +13,7 @@ export const store = configureStore({
     collection: collectionSlice,
     item: itemSlice,
     comment: commentSlice,
+    admin: adminSlice,
   },
 });
 
