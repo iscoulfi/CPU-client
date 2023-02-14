@@ -47,7 +47,7 @@ const Navibar = ({
 
   useEffect(() => {
     pathname !== '/search' && setSearchValue('');
-  }, [pathname]);
+  }, [pathname, setSearchValue]);
 
   return (
     <Navbar className="navibar rounded-top" expand="md" sticky="top">

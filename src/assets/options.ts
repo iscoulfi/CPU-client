@@ -1,9 +1,16 @@
 import { IOption } from '../types/appinterface';
 
-export const options: IOption[] = [
+export const topicOptions: IOption[] = [
   { value: 'alcohol', label: 'Alcohol' },
   { value: 'perfume', label: 'Perfume' },
   { value: 'books', label: 'Books' },
+];
+
+export const sortOptions: IOption[] = [
+  { value: 'dateAsc', label: 'date (asc)' },
+  { value: 'dateDesc', label: 'date (desc)' },
+  { value: 'popularityAsc', label: 'popularity (asc)' },
+  { value: 'popularityDesc', label: 'popularity (desc)' },
 ];
 
 export const fields: IOption[] = [

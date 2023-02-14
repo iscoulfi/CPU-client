@@ -1,9 +1,8 @@
 import Select, { SingleValue } from 'react-select';
 import { IOption, IField } from '../../types/appinterface';
-import { options } from '../../assets/options';
 import Form from 'react-bootstrap/Form';
 
-const Field = ({ currentField, setCurrentField }: IField) => {
+const Field = ({ currentField, setCurrentField, options, label }: IField) => {
   const getValue = () =>
     currentField ? options.find(r => r.value === currentField) : '';
 
@@ -13,13 +12,13 @@ const Field = ({ currentField, setCurrentField }: IField) => {
 
   return (
     <>
-      <Form.Label>Topic</Form.Label>
+      <Form.Label>{label}</Form.Label>
       <Select
         className="mb-3"
         onChange={onChange}
         value={getValue()}
         options={options}
-        placeholder="Select topic..."
+        placeholder="Select..."
       />
     </>
   );

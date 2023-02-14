@@ -8,6 +8,8 @@ export interface IOption {
 export interface IField {
   currentField: string;
   setCurrentField: Dispatch<SetStateAction<string>>;
+  options: IOption[];
+  label: string;
 }
 
 export interface IFields {

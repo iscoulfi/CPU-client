@@ -7,6 +7,7 @@ import { CollInputs } from '../../types/appinterface';
 import { useNavigate } from 'react-router-dom';
 import { useAppDispatch } from '../../redux/store';
 import { createCollection } from '../../redux/slices/collection/asyncActions';
+import { topicOptions } from '../../assets/options';
 import SimpleMDE from 'react-simplemde-editor';
 import MDE from 'easymde';
 import 'easymde/dist/easymde.min.css';
@@ -106,7 +107,12 @@ const AddColl = () => {
           />
         </Form.Group>
 
-        <Field currentField={topic} setCurrentField={setTopic} />
+        <Field
+          currentField={topic}
+          setCurrentField={setTopic}
+          options={topicOptions}
+          label={'Topic'}
+        />
 
         <Form.Group>
           <Form.Label>Description</Form.Label>
