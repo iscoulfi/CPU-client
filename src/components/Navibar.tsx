@@ -6,16 +6,13 @@ import {
   ChangeEvent,
   Dispatch,
   SetStateAction,
-  useCallback,
   useContext,
   useEffect,
-  useState,
 } from 'react';
 import { checkIsAuth, logout } from '../redux/slices/auth/slice';
 import { useAppSelector, useAppDispatch } from '../redux/store';
 import { ItemPreview } from '../layouts/MainLayout';
-import axios from '../utils/axios';
-import debounce from 'lodash.debounce';
+import { DebouncedFunc } from 'lodash';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
@@ -24,28 +21,23 @@ import LangSwitch from './UI/LangSwitch';
 
 type NavibarProps = {
   setItems: Dispatch<SetStateAction<ItemPreview[] | []>>;
+  searchValue: string;
+  setSearchValue: Dispatch<SetStateAction<string>>;
+  updateSearchItems: DebouncedFunc<(str: string) => Promise<void>>;
 };
 
-const Navibar = ({ setItems }: NavibarProps) => {
+const Navibar = ({
+  setItems,
+  searchValue,
+  setSearchValue,
+  updateSearchItems,
+}: NavibarProps) => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isAuth = useAppSelector(checkIsAuth);
-  const [searchValue, setSearchValue] = useState('');
   const { theme, toggleTheme } = useContext(ThemeContext);
   const { t } = useTranslation();
   const { pathname } = useLocation();
-
-  const updateSearchItems = useCallback(
-    debounce(async (str: string) => {
-      try {
-        const { data } = await axios.get(`/items?search=${str}`);
-        setItems(data);
-      } catch (e) {
-        console.log(e);
-      }
-    }, 200),
-    []
-  );
 
   const searchPost = (event: ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);

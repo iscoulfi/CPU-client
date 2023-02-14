@@ -1,5 +1,7 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Outlet } from 'react-router-dom';
+import axios from '../utils/axios';
+import debounce from 'lodash.debounce';
 import Navibar from '../components/Navibar';
 
 export type ItemPreview = {
@@ -11,10 +13,29 @@ export type ItemPreview = {
 
 const MainLayout = () => {
   const [items, setItems] = useState<[] | ItemPreview[]>([]);
+  const [searchValue, setSearchValue] = useState('');
+
+  const updateSearchItems = useCallback(
+    debounce(async (str: string) => {
+      try {
+        const { data } = await axios.get(`/items?search=${str}`);
+        setItems(data);
+      } catch (e) {
+        console.log(e);
+      }
+    }, 200),
+    []
+  );
+
   return (
     <>
-      <Navibar setItems={setItems} />
-      <Outlet context={items} />
+      <Navibar
+        setItems={setItems}
+        searchValue={searchValue}
+        setSearchValue={setSearchValue}
+        updateSearchItems={updateSearchItems}
+      />
+      <Outlet context={{ items, setSearchValue, updateSearchItems }} />
     </>
   );
 };

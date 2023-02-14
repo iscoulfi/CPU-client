@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { TagCloud } from 'react-tagcloud';
+import { useOutletProps } from '../../hooks/useOutletProps';
 import axios from '../../utils/axios';
 
 interface ITag {
@@ -9,6 +11,8 @@ interface ITag {
 
 const TagsCloud = () => {
   const [tags, setTags] = useState([]);
+  const navigate = useNavigate();
+  const { setSearchValue, updateSearchItems } = useOutletProps();
 
   const tagsData = useMemo(
     () =>
@@ -37,6 +41,11 @@ const TagsCloud = () => {
     hue: 'blue',
   };
 
+  const searchByTag = (tag: string) => {
+    navigate('/search');
+    setSearchValue(tag);
+    updateSearchItems(tag);
+  };
   return (
     <div className="mt-4">
       <h1>Tags</h1>
@@ -46,7 +55,7 @@ const TagsCloud = () => {
           maxSize={24}
           colorOptions={options}
           tags={tagsData}
-          onClick={(tag: ITag) => console.log(tag)}
+          onClick={(tag: ITag) => searchByTag(tag.value)}
         />
       </div>
     </div>

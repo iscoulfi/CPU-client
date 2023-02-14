@@ -1,11 +1,10 @@
-import { useOutletContext } from 'react-router-dom';
-import { ItemPreview } from '../layouts/MainLayout';
 import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import ListGroup from 'react-bootstrap/ListGroup';
+import { useOutletProps } from '../hooks/useOutletProps';
 
 const SearchItem = () => {
-  const items: ItemPreview[] | [] = useOutletContext();
+  const { items } = useOutletProps();
 
   return (
     <Container style={{ maxWidth: '800px' }}>
