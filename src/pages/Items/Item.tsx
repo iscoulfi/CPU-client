@@ -4,13 +4,16 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getCollection } from '../../redux/slices/collection/asyncActions';
 import { FcLikePlaceholder, FcLike } from 'react-icons/fc';
+import { io } from 'socket.io-client';
 import ReactMarkdown from 'react-markdown';
 import Button from 'react-bootstrap/Button';
 import { getItem } from '../../redux/slices/item/asyncActions';
 import { setItem } from '../../redux/slices/item/slice';
 import Comments from '../../components/Items/Comments';
+import { getItemComments } from '../../redux/slices/comment/asyncActions';
 
 const Item = () => {
+  const socket = io(process.env.REACT_APP_SERVER as string);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { collId, itemId } = useParams();
@@ -33,6 +36,16 @@ const Item = () => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('refresh-comments', id => {
+        if (itemId === id) {
+          dispatch(getItemComments(itemId as string));
+        }
+      });
+    }
+  }, [socket, dispatch, itemId]);
 
   return (
     <>

@@ -2,20 +2,23 @@ import { useForm } from 'react-hook-form';
 import { useAppSelector, useAppDispatch } from '../../redux/store';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
-import Form from 'react-bootstrap/Form';
-import Button from 'react-bootstrap/Button';
+import { io } from 'socket.io-client';
 import {
   createComment,
   getItemComments,
 } from '../../redux/slices/comment/asyncActions';
 import { CommentData } from '../../redux/slices/comment/types';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Form from 'react-bootstrap/Form';
+import Button from 'react-bootstrap/Button';
 
 type Comment = {
   comment: string;
 };
 
 function Comments() {
+  const socket = io(process.env.REACT_APP_SERVER as string);
+
   const dispatch = useAppDispatch();
   const { itemId } = useParams();
   const { comments } = useAppSelector(state => state.comment);
@@ -25,6 +28,7 @@ function Comments() {
     try {
       if (itemId && user)
         dispatch(createComment({ itemId, comment, author: user.username }));
+      socket.emit('refresh', itemId);
       reset({ comment: '' });
     } catch (error) {
       console.log(error);

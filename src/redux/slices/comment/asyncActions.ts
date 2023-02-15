@@ -1,17 +1,16 @@
 import { CommentData, CreateCommentParams } from './types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../../utils/axios';
-import { refreshComments } from './slice';
 
 export const createComment = createAsyncThunk(
   'comment/createComment',
-  async ({ itemId, comment, author }: CreateCommentParams, { dispatch }) => {
+  async ({ itemId, comment, author }: CreateCommentParams) => {
     try {
-      const { data } = await axios.post<CommentData>(`/comments/${itemId}`, {
+      const { data } = await axios.post<CommentData[]>(`/comments/${itemId}`, {
         comment,
         author,
       });
-      dispatch(refreshComments(data));
+      return data;
     } catch (error) {
       console.log(error);
     }
