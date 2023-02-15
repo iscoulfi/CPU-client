@@ -14,7 +14,7 @@ const MyPage = () => {
     dispatch(getMyCollections());
   }, [dispatch]);
 
-  if (!window.localStorage.getItem('token') && !isAuth) {
+  if (!window.localStorage.getItem('token') || !isAuth) {
     return <Navigate to="/login" />;
   }
 

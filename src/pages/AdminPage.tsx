@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../redux/store';
-import { getAll } from '../redux/slices/admin/asyncActions';
+import { getAll, removeUser } from '../redux/slices/admin/asyncActions';
+import { logout } from '../redux/slices/auth/slice';
+import { useNavigate } from 'react-router-dom';
 
 import AdminTable from '../components/AdminPage/AdminTable';
 import Toolbar from '../components/AdminPage/Toolbar';
@@ -10,6 +12,28 @@ const AdminPage = () => {
   const [checkedUserId, setCheckedUserId] = useState('');
   const [activeCheckbox, setActiveCheckbox] = useState<null | number>(null);
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+
+  const resetCheckbox = () => {
+    setActiveCheckbox(null);
+    setCheckedUserId('');
+  };
+
+  const block = (statusUser: string) => {};
+
+  const cleaner = () => {
+    dispatch(removeUser(checkedUserId));
+    logoutUser();
+    resetCheckbox();
+  };
+
+  const logoutUser = () => {
+    if (checkedUserId === window.localStorage.id) {
+      dispatch(logout());
+      window.localStorage.removeItem('token');
+      navigate('/');
+    }
+  };
 
   useEffect(() => {
     dispatch(getAll());
@@ -25,7 +49,7 @@ const AdminPage = () => {
           </Button>
           <Button variant="outline-primary">Admin</Button>
         </div>
-        <Toolbar />
+        <Toolbar cleaner={cleaner} block={block} />
       </div>
       <AdminTable
         setCheckedUserId={setCheckedUserId}
