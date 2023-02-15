@@ -26,9 +26,9 @@ export const removeUser = createAsyncThunk(
 
 export const blockUser = createAsyncThunk(
   'admin/blockUser',
-  async ({ username, statusUser }: blockUserProps) => {
+  async ({ userId, statusUser }: blockUserProps) => {
     try {
-      const { data } = await axios.put<UsersData>(`/auth/${username}`, {
+      const { data } = await axios.put<UsersData[]>(`/auth/${userId}`, {
         statusUser,
       });
       return data;

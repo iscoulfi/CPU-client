@@ -1,10 +1,11 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useEffect } from 'react';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import { useCallback, useEffect } from 'react';
 import { useAppSelector, useAppDispatch } from './redux/store';
 import { getMe } from './redux/slices/auth/asyncActions';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
+import { io } from 'socket.io-client';
 
 import RingLoader from 'react-spinners/RingLoader';
 import MainLayout from './layouts/MainLayout';
@@ -20,10 +21,19 @@ import AddItem from './pages/Items/AddItem';
 import Item from './pages/Items/Item';
 import SearchItem from './pages/SearchItem';
 import AdminPage from './pages/AdminPage';
+import { logout } from './redux/slices/auth/slice';
 
 function App() {
   const dispatch = useAppDispatch();
-  const { message, status } = useAppSelector(state => state.auth);
+  const navigate = useNavigate();
+  const { user, message, status } = useAppSelector(state => state.auth);
+  const socket = io(process.env.REACT_APP_SERVER as string);
+
+  useEffect(() => {
+    if (user) {
+      socket.emit('add-user', user._id);
+    }
+  }, [user, socket]);
 
   useEffect(() => {
     dispatch(getMe());
@@ -33,39 +43,48 @@ function App() {
     if (message) toast.info(message);
   }, [message]);
 
+  const logoutUser = useCallback(() => {
+    dispatch(logout());
+    window.localStorage.removeItem('token');
+    navigate('/');
+  }, [dispatch, navigate]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('logout', () => {
+        logoutUser();
+      });
+    }
+  }, [socket, logoutUser]);
+
   return (
     <>
       {status !== 'loading' ? (
-        <BrowserRouter>
-          <div className="container">
-            <div className="app">
-              <Routes>
-                <Route path="/" element={<MainLayout />}>
-                  <Route index element={<HomePage />} />
-                  <Route path="search" element={<SearchItem />} />
-                  <Route path="admin" element={<AdminPage />} />
-                  <Route path="personal" element={<MyPage />} />
-                  <Route path="personal/addcoll" element={<AddColl />} />
-                  <Route path="personal/:collId" element={<Items />} />
-                  <Route path="personal/:collId/edit" element={<EditColl />} />
-                  <Route
-                    path="personal/:collId/addItem"
-                    element={<AddItem />}
-                  />
-                  <Route
-                    path="personal/:collId/:itemId/edit"
-                    element={<AddItem />}
-                  />
-                  <Route path="personal/:collId/:itemId" element={<Item />} />
-                  <Route path="login" element={<Login />} />
-                  <Route path="registr" element={<Registr />} />
-                </Route>
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-              <ToastContainer autoClose={2500} />
-            </div>
+        <div className="container">
+          <div className="app">
+            <Routes>
+              <Route path="/" element={<MainLayout />}>
+                <Route index element={<HomePage />} />
+                <Route path="search" element={<SearchItem />} />
+                <Route path="admin" element={<AdminPage />} />
+                <Route path="personal" element={<MyPage />} />
+                <Route path="personal/addcoll" element={<AddColl />} />
+                <Route path="personal/:collId" element={<Items />} />
+                <Route path="personal/:collId/edit" element={<EditColl />} />
+                <Route path="personal/:collId/addItem" element={<AddItem />} />
+                <Route
+                  path="personal/:collId/:itemId/edit"
+                  element={<AddItem />}
+                />
+                <Route path="personal/:collId/:itemId" element={<Item />} />
+                <Route path="login" element={<Login />} />
+                <Route path="registr" element={<Registr />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <ToastContainer autoClose={2500} />
           </div>
-        </BrowserRouter>
+        </div>
       ) : (
         <RingLoader color="#428bff" size={150} className="spinner" />
       )}

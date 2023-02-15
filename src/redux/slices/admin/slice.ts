@@ -52,8 +52,7 @@ const adminSlice = createSlice({
     });
     builder.addCase(blockUser.fulfilled, (state, action) => {
       state.status = Status.SUCCESS;
-      state.users.find(user => user._id === action.payload!._id)!.statusUser =
-        action.payload!.statusUser;
+      if (action.payload) state.users = action.payload;
     });
     builder.addCase(blockUser.rejected, state => {
       state.status = Status.ERROR;

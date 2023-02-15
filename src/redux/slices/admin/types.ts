@@ -15,6 +15,6 @@ export interface UsersData {
 }
 
 export interface blockUserProps {
-  username: string;
+  userId: string;
   statusUser: string;
 }

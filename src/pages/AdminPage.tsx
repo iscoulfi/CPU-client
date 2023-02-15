@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../redux/store';
-import { getAll, removeUser } from '../redux/slices/admin/asyncActions';
-import { logout } from '../redux/slices/auth/slice';
-import { useNavigate } from 'react-router-dom';
+import {
+  getAll,
+  removeUser,
+  blockUser,
+} from '../redux/slices/admin/asyncActions';
+import { io } from 'socket.io-client';
 
 import AdminTable from '../components/AdminPage/AdminTable';
 import Toolbar from '../components/AdminPage/Toolbar';
@@ -12,27 +15,23 @@ const AdminPage = () => {
   const [checkedUserId, setCheckedUserId] = useState('');
   const [activeCheckbox, setActiveCheckbox] = useState<null | number>(null);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
+  const socket = io(process.env.REACT_APP_SERVER as string);
 
   const resetCheckbox = () => {
     setActiveCheckbox(null);
     setCheckedUserId('');
   };
 
-  const block = (statusUser: string) => {};
-
-  const cleaner = () => {
-    dispatch(removeUser(checkedUserId));
-    logoutUser();
+  const block = (statusUser: string) => {
+    dispatch(blockUser({ statusUser, userId: checkedUserId }));
+    socket.emit('logout-user', checkedUserId);
     resetCheckbox();
   };
 
-  const logoutUser = () => {
-    if (checkedUserId === window.localStorage.id) {
-      dispatch(logout());
-      window.localStorage.removeItem('token');
-      navigate('/');
-    }
+  const cleaner = () => {
+    dispatch(removeUser(checkedUserId));
+    socket.emit('logout-user', checkedUserId);
+    resetCheckbox();
   };
 
   useEffect(() => {
