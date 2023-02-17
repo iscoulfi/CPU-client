@@ -3,12 +3,12 @@ import { removeCollection } from '../../redux/slices/collection/asyncActions';
 import { storage } from '../../assets/firebase';
 import { deleteObject, ref } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
+import { CollectionData } from '../../redux/slices/collection/types';
+import { removeItem } from '../../redux/slices/item/asyncActions';
 import ReactMarkdown from 'react-markdown';
 import Placeholder from 'react-bootstrap/Placeholder';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
-import { CollectionData } from '../../redux/slices/collection/types';
-import { removeItem } from '../../redux/slices/item/asyncActions';
 
 interface CollPreviewParams {
   collection: CollectionData;
@@ -34,18 +34,13 @@ const CollPriew = ({ collection, ind }: CollPreviewParams) => {
       <Accordion.Body>
         <div className="d-flex">
           <div>
-            {collection.imgUrl ? (
-              <img
-                src={collection.imgUrl}
-                className="rounded coll_img"
-                alt=""
-              />
-            ) : (
-              <Placeholder
-                style={{ width: '150px', height: '150px' }}
-                className="rounded"
-              />
-            )}
+            <img
+              src={
+                collection.imgUrl ? collection.imgUrl : './img/placeholder.jpg'
+              }
+              className="rounded coll_img"
+              alt=""
+            />
           </div>
           <div className="ms-4">
             <ReactMarkdown children={collection.text} />

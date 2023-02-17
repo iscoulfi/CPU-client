@@ -31,7 +31,11 @@ const BigColls = () => {
               key={coll._id}
               className="mb-4 ms-md-4"
             >
-              <Card.Img variant="top" src={coll.imgUrl} className="card_img" />
+              <Card.Img
+                variant="top"
+                src={coll.imgUrl ? coll.imgUrl : './img/placeholder.jpg'}
+                className="card_img"
+              />
               <Card.Body>
                 <Card.Title className="fw-bold">{`${coll.title} | ${coll.topic}`}</Card.Title>
                 <Card.Text>{coll.text}</Card.Text>

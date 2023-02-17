@@ -40,13 +40,6 @@ const Items = () => {
               <div className="text-center my-3">
                 <Button
                   variant="outline-primary"
-                  className=" mx-2"
-                  onClick={() => navigate(`/personal`)}
-                >
-                  To collections
-                </Button>
-                <Button
-                  variant="outline-primary"
                   onClick={() => navigate(`/personal/${collId}/addItem`)}
                 >
                   Add New Item

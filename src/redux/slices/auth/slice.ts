@@ -59,7 +59,7 @@ const authSlice = createSlice({
         state.message = action.payload.message;
         state.user = action.payload.user;
         state.token = action.payload.token;
-        state.roles = action.payload.user.roles;
+        state.roles = action.payload.user?.roles;
         state.status = Status.SUCCESS;
       }
     });
