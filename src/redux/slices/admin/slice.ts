@@ -1,6 +1,6 @@
 import { Status } from '../auth/types';
 import { createSlice } from '@reduxjs/toolkit';
-import { getAll, removeUser, blockUser } from './asyncActions';
+import { getAll, removeUser, updateUser } from './asyncActions';
 import { AdminSliceState, UsersData } from './types';
 
 const initialUsers: UsersData[] = [
@@ -47,14 +47,14 @@ const adminSlice = createSlice({
       state.status = Status.ERROR;
     });
 
-    builder.addCase(blockUser.pending, state => {
+    builder.addCase(updateUser.pending, state => {
       state.status = Status.LOADING;
     });
-    builder.addCase(blockUser.fulfilled, (state, action) => {
+    builder.addCase(updateUser.fulfilled, (state, action) => {
       state.status = Status.SUCCESS;
       if (action.payload) state.users = action.payload;
     });
-    builder.addCase(blockUser.rejected, state => {
+    builder.addCase(updateUser.rejected, state => {
       state.status = Status.ERROR;
     });
   },

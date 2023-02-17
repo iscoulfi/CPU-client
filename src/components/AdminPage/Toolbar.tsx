@@ -6,22 +6,33 @@ import { TbLockOpen } from 'react-icons/tb';
 interface ToolbarParams {
   cleaner: () => void;
   block: (statusUser: string) => void;
+  checkedUserId: string;
 }
 
-function Toolbar({ cleaner, block }: ToolbarParams) {
+function Toolbar({ cleaner, block, checkedUserId }: ToolbarParams) {
   return (
     <ButtonGroup aria-label="Basic example" className="mb-2">
-      <Button variant="danger" onClick={() => block('blocked')}>
+      <Button
+        variant="danger"
+        onClick={() => block('blocked')}
+        disabled={!checkedUserId}
+      >
         Block
       </Button>
       <Button
         variant="success"
-        className="px-4"
+        className="px-4 m-0"
         onClick={() => block('available')}
+        disabled={!checkedUserId}
       >
         <TbLockOpen />
       </Button>
-      <Button variant="secondary" className="px-4" onClick={cleaner}>
+      <Button
+        variant="secondary"
+        className="px-4 m-0"
+        onClick={cleaner}
+        disabled={!checkedUserId}
+      >
         <AiFillDelete />
       </Button>
     </ButtonGroup>

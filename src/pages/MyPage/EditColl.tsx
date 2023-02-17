@@ -100,7 +100,7 @@ const EditColl = () => {
             id: collection._id,
           })
         );
-      navigate('/personal');
+      navigate(`/${collection?.author}`);
     } catch (error) {
       console.log((error as Error).message);
     }
@@ -151,7 +151,7 @@ const EditColl = () => {
 
         <Button
           variant="secondary"
-          onClick={() => navigate('/personal')}
+          onClick={() => navigate(`/${collection?.author}`)}
           className="my-3 "
         >
           Cancel

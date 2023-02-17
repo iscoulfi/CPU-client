@@ -1,4 +1,4 @@
-import { UsersData, blockUserProps } from './types';
+import { UsersData, updateUserProps } from './types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../../utils/axios';
 
@@ -24,12 +24,12 @@ export const removeUser = createAsyncThunk(
   }
 );
 
-export const blockUser = createAsyncThunk(
-  'admin/blockUser',
-  async ({ userId, statusUser }: blockUserProps) => {
+export const updateUser = createAsyncThunk(
+  'admin/updateUser',
+  async ({ userId, prop }: updateUserProps) => {
     try {
       const { data } = await axios.put<UsersData[]>(`/auth/${userId}`, {
-        statusUser,
+        prop,
       });
       return data;
     } catch (error) {

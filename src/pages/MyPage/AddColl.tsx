@@ -4,7 +4,7 @@ import { storage } from '../../assets/firebase';
 import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { CollInputs } from '../../types/appinterface';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../redux/store';
 import { createCollection } from '../../redux/slices/collection/asyncActions';
 import { topicOptions } from '../../assets/options';
@@ -36,6 +36,7 @@ export const options = {
 } as MDE.Options;
 
 const AddColl = () => {
+  const { userId } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [file, setFile] = useState<File | null>(null);
@@ -72,6 +73,7 @@ const AddColl = () => {
       }
       dispatch(
         createCollection({
+          userId: userId as string,
           title,
           topic,
           text: value,
@@ -79,7 +81,7 @@ const AddColl = () => {
           adFields,
         })
       );
-      navigate('/personal');
+      navigate(`/${userId}`);
     } catch (error) {
       console.log((error as Error).message);
     }
@@ -144,7 +146,7 @@ const AddColl = () => {
 
         <Button
           variant="secondary"
-          onClick={() => navigate('/personal')}
+          onClick={() => navigate(`/${userId}`)}
           className="mb-3 "
         >
           Cancel

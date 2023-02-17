@@ -6,11 +6,11 @@ import { getCollection } from '../../redux/slices/collection/asyncActions';
 import { FcLikePlaceholder, FcLike } from 'react-icons/fc';
 import { io } from 'socket.io-client';
 import ReactMarkdown from 'react-markdown';
-import Button from 'react-bootstrap/Button';
 import { getItem } from '../../redux/slices/item/asyncActions';
 import { setItem } from '../../redux/slices/item/slice';
-import Comments from '../../components/Items/Comments';
 import { getItemComments } from '../../redux/slices/comment/asyncActions';
+import Button from 'react-bootstrap/Button';
+import Comments from '../../components/Items/Comments';
 
 const Item = () => {
   const socket = io(process.env.REACT_APP_SERVER as string);
@@ -29,6 +29,7 @@ const Item = () => {
   }, [dispatch, collId, itemId]);
 
   const setLike = async () => {
+    if (!user) return;
     try {
       const { data } = await axios.patch(`/items/${itemId}/like`);
       dispatch(setItem(data));
@@ -51,6 +52,7 @@ const Item = () => {
     <>
       <h1>{item.title}</h1>
       <p>{item.tags.map(tag => `#${tag} `)}</p>
+
       {collection?.adFields
         .filter(el => !el[0].includes('text'))
         .map(el => (
@@ -58,6 +60,7 @@ const Item = () => {
             {el[1]} = {item[el[0]]}
           </p>
         ))}
+
       {collection?.adFields
         .filter(el => el[0].includes('text'))
         .map(el => (
@@ -65,12 +68,13 @@ const Item = () => {
             <ReactMarkdown children={item[el[0]] as string} />
           </div>
         ))}
+
       <div onClick={setLike} className="like">
         {isLiked ? <FcLike /> : <FcLikePlaceholder />}
       </div>
       <p>{likeCounter}</p>
       <Button variant="primary" onClick={() => navigate(`/personal/${collId}`)}>
-        To items
+        To collection
       </Button>
       <Comments />
     </>

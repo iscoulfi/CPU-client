@@ -24,10 +24,10 @@ export const createCollection = createAsyncThunk(
 
 export const getMyCollections = createAsyncThunk(
   'collection/getMyCollections',
-  async () => {
+  async (userId: string) => {
     try {
       const { data } = await axios.get<CollectionData[]>(
-        '/collections/user/me'
+        `/collections/user/${userId}`
       );
       return data;
     } catch (error) {

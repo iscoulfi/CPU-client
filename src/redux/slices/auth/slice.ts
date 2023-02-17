@@ -6,6 +6,7 @@ import { Status, AuthSliceState, MessageType } from './types';
 const initialState: AuthSliceState = {
   user: null,
   token: '',
+  roles: ['user'],
   message: '',
   status: Status.IDLE, // idle | loading | success | error
 };
@@ -37,6 +38,7 @@ const authSlice = createSlice({
         state.message = action.payload.message;
         state.user = action.payload.newUser;
         state.token = action.payload.token;
+        state.roles = action.payload.newUser.roles;
         state.status = Status.SUCCESS;
       }
     });
@@ -57,6 +59,7 @@ const authSlice = createSlice({
         state.message = action.payload.message;
         state.user = action.payload.user;
         state.token = action.payload.token;
+        state.roles = action.payload.user.roles;
         state.status = Status.SUCCESS;
       }
     });
@@ -75,8 +78,9 @@ const authSlice = createSlice({
     builder.addCase(getMe.fulfilled, (state, action) => {
       if (action.payload) {
         state.message = '';
-        state.user = action.payload.user;
-        state.token = action.payload.token;
+        state.user = action.payload?.user;
+        state.token = action.payload?.token;
+        state.roles = action.payload.user?.roles || ['user'];
         state.status = Status.SUCCESS;
       }
     });
@@ -89,5 +93,7 @@ const authSlice = createSlice({
 });
 
 export const checkIsAuth = (state: RootState) => Boolean(state.auth.token);
+export const checkIsAdmin = (state: RootState) =>
+  Boolean(state.auth.roles[0] === 'admin');
 export const { logout, reduceMessage } = authSlice.actions;
 export default authSlice.reducer;

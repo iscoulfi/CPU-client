@@ -50,6 +50,12 @@ function App() {
   }, [dispatch, navigate]);
 
   useEffect(() => {
+    if (user) {
+      user.statusUser === 'blocked' && logoutUser();
+    }
+  }, [user, logoutUser]);
+
+  useEffect(() => {
     if (socket) {
       socket.on('logout', () => {
         logoutUser();
@@ -67,8 +73,8 @@ function App() {
                 <Route index element={<HomePage />} />
                 <Route path="search" element={<SearchItem />} />
                 <Route path="admin" element={<AdminPage />} />
-                <Route path="personal" element={<MyPage />} />
-                <Route path="personal/addcoll" element={<AddColl />} />
+                <Route path=":userId" element={<MyPage />} />
+                <Route path=":userId/addcoll" element={<AddColl />} />
                 <Route path="personal/:collId" element={<Items />} />
                 <Route path="personal/:collId/edit" element={<EditColl />} />
                 <Route path="personal/:collId/addItem" element={<AddItem />} />

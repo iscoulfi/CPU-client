@@ -14,7 +14,7 @@ export interface UsersData {
   createdAt: string;
 }
 
-export interface blockUserProps {
+export interface updateUserProps {
   userId: string;
-  statusUser: string;
+  prop: string | string[];
 }

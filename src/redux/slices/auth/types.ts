@@ -8,6 +8,7 @@ export enum Status {
 export interface AuthSliceState {
   user: null | UserData;
   token: string;
+  roles: string[];
   message: string;
   status: Status;
 }
@@ -31,7 +32,9 @@ export interface UserData {
   username: string;
   email: string;
   password: string;
-  roles: ['string'];
+  roles: string[];
+  statusUser: string;
+  collections: string[];
 }
 
 interface IUserData {

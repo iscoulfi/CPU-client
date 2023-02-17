@@ -57,10 +57,16 @@
   .navbar {
     background-color: $light;
   }
+  .nav {
+    background-color: $light;
+  }
 }
 
 :root[data-theme='dark'] {
   .navbar {
+    background-color: $dark;
+  }
+  .nav {
     background-color: $dark;
   }
   .form-control {

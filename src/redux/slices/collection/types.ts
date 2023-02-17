@@ -1,6 +1,7 @@
 import { Status } from './../auth/types';
 
 export interface createCollectionParams {
+  userId: string;
   title: string;
   topic: string;
   text: string;

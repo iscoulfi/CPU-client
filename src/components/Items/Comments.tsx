@@ -48,37 +48,39 @@ function Comments() {
 
   return (
     <>
-      <div className="comment_form mt-2 shadow">
-        <Form onSubmit={handleSubmit(sendComment)}>
-          <FloatingLabel controlId="floatingTextarea2" label="Comment">
-            <Form.Control
-              as="textarea"
-              placeholder="Leave a comment here"
-              style={{ height: '100px' }}
-              {...register('comment', { required: true })}
-              isInvalid={!!errors.comment}
-            />
-          </FloatingLabel>
-          <div className="d-flex justify-content-end">
-            <Button
-              variant="secondary"
-              onClick={() => reset({ comment: '' })}
-              size="sm"
-              className="mt-2 text-end"
-            >
-              Cancel
-            </Button>
-            <Button
-              variant="primary"
-              type="submit"
-              size="sm"
-              className="mt-2 mx-2"
-            >
-              Send
-            </Button>
-          </div>
-        </Form>
-      </div>
+      {user && (
+        <div className="comment_form mt-2 shadow">
+          <Form onSubmit={handleSubmit(sendComment)}>
+            <FloatingLabel controlId="floatingTextarea2" label="Comment">
+              <Form.Control
+                as="textarea"
+                placeholder="Leave a comment here"
+                style={{ height: '100px' }}
+                {...register('comment', { required: true })}
+                isInvalid={!!errors.comment}
+              />
+            </FloatingLabel>
+            <div className="d-flex justify-content-end">
+              <Button
+                variant="secondary"
+                onClick={() => reset({ comment: '' })}
+                size="sm"
+                className="mt-2 text-end"
+              >
+                Cancel
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+                size="sm"
+                className="mt-2 mx-2"
+              >
+                Send
+              </Button>
+            </div>
+          </Form>
+        </div>
+      )}
       {comments.map((c: CommentData) => (
         <div className="comment_card mt-3 shadow" key={c._id}>
           <span className="fw-bold">
