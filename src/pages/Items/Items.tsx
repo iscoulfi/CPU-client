@@ -35,7 +35,7 @@ const Items = () => {
       {collection ? (
         <div className="items">
           <h1 className="mt-3 text-center">{`${collection.title} | ${collection.topic}`}</h1>
-          {user?.collections.includes(collId as string) || isAdmin ? (
+          {user?._id === collection.author || isAdmin ? (
             <>
               <div className="text-center my-3">
                 <Button

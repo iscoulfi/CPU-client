@@ -7,7 +7,6 @@ import {
 } from '../redux/slices/admin/asyncActions';
 import { Navigate, useNavigate } from 'react-router';
 import { checkIsAdmin } from '../redux/slices/auth/slice';
-import { io } from 'socket.io-client';
 
 import AdminTable from '../components/AdminPage/AdminTable';
 import Toolbar from '../components/AdminPage/Toolbar';
@@ -20,7 +19,7 @@ const AdminPage = () => {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const isAdmin = useAppSelector(checkIsAdmin);
-  const socket = io(process.env.REACT_APP_SERVER as string);
+  const { socket } = useAppSelector(state => state.socket);
 
   const resetCheckbox = () => {
     setActiveCheckbox(null);

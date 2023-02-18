@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { getCollection } from '../../redux/slices/collection/asyncActions';
 import { FcLikePlaceholder, FcLike } from 'react-icons/fc';
-import { io } from 'socket.io-client';
+
 import ReactMarkdown from 'react-markdown';
 import { getItem } from '../../redux/slices/item/asyncActions';
 import { setItem } from '../../redux/slices/item/slice';
@@ -13,15 +13,21 @@ import Button from 'react-bootstrap/Button';
 import Comments from '../../components/Items/Comments';
 
 const Item = () => {
-  const socket = io(process.env.REACT_APP_SERVER as string);
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { collId, itemId } = useParams();
   const { collection } = useAppSelector(state => state.collection);
   const { item } = useAppSelector(state => state.item);
   const { user } = useAppSelector(state => state.auth);
+  const { socket } = useAppSelector(state => state.socket);
   const isLiked = Boolean(item.likes[user?._id as string]);
   const likeCounter = Object.keys(item.likes).length;
+
+  useEffect(() => {
+    if (socket) {
+      socket.emit('joinRoom', itemId);
+    }
+  }, [socket, itemId]);
 
   useEffect(() => {
     dispatch(getCollection(collId as string));
@@ -40,11 +46,10 @@ const Item = () => {
 
   useEffect(() => {
     if (socket) {
-      socket.on('refresh-comments', id => {
-        if (itemId === id) {
-          dispatch(getItemComments(itemId as string));
-        }
+      socket.on('refresh-comments', (id: string) => {
+        dispatch(getItemComments(id));
       });
+      return () => socket.off('refresh-comments');
     }
   }, [socket, dispatch, itemId]);
 

@@ -6,6 +6,8 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
 import { io } from 'socket.io-client';
+import { setSocket } from './redux/slices/socket/slice';
+import { logout } from './redux/slices/auth/slice';
 
 import RingLoader from 'react-spinners/RingLoader';
 import MainLayout from './layouts/MainLayout';
@@ -21,19 +23,23 @@ import AddItem from './pages/Items/AddItem';
 import Item from './pages/Items/Item';
 import SearchItem from './pages/SearchItem';
 import AdminPage from './pages/AdminPage';
-import { logout } from './redux/slices/auth/slice';
+
+const socket = io(process.env.REACT_APP_SERVER as string);
 
 function App() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { user, message, status } = useAppSelector(state => state.auth);
-  const socket = io(process.env.REACT_APP_SERVER as string);
+
+  useEffect(() => {
+    dispatch(setSocket(socket));
+  }, [dispatch]);
 
   useEffect(() => {
     if (user) {
       socket.emit('add-user', user._id);
     }
-  }, [user, socket]);
+  }, [user]);
 
   useEffect(() => {
     dispatch(getMe());
@@ -61,7 +67,7 @@ function App() {
         logoutUser();
       });
     }
-  }, [socket, logoutUser]);
+  }, [logoutUser]);
 
   return (
     <>

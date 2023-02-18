@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { CollectionData } from '../../redux/slices/collection/types';
 import { removeItem } from '../../redux/slices/item/asyncActions';
 import ReactMarkdown from 'react-markdown';
-import Placeholder from 'react-bootstrap/Placeholder';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 

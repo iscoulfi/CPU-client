@@ -31,11 +31,11 @@ const MyPage = () => {
         console.log(e);
       }
     })();
-  }, [dispatch, userId]);
+  }, [dispatch, userId, isAdmin, navigate]);
 
   useEffect(() => {
     dispatch(getMyCollections(userId as string));
-  }, [dispatch]);
+  }, [dispatch, userId]);
 
   if (!window.localStorage.getItem('token') && !isAuth) {
     return <Navigate to="/login" />;

@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form';
 import { useAppSelector, useAppDispatch } from '../../redux/store';
 import { useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { io } from 'socket.io-client';
 import {
   createComment,
   getItemComments,
@@ -17,18 +16,18 @@ type Comment = {
 };
 
 function Comments() {
-  const socket = io(process.env.REACT_APP_SERVER as string);
-
   const dispatch = useAppDispatch();
   const { itemId } = useParams();
   const { comments } = useAppSelector(state => state.comment);
   const { user } = useAppSelector(state => state.auth);
+  const { socket } = useAppSelector(state => state.socket);
 
   const sendComment = ({ comment }: Comment) => {
     try {
-      if (itemId && user)
+      if (itemId && user) {
         dispatch(createComment({ itemId, comment, author: user.username }));
-      socket.emit('refresh', itemId);
+        socket.emit('refresh', itemId);
+      }
       reset({ comment: '' });
     } catch (error) {
       console.log(error);
