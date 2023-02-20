@@ -4,6 +4,7 @@ import { useAppSelector, useAppDispatch } from '../redux/store';
 import { checkIsAuth, reduceMessage } from '../redux/slices/auth/slice';
 import { registerUser } from '../redux/slices/auth/asyncActions';
 import { useForm, SubmitHandler } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
@@ -14,6 +15,7 @@ type Inputs = {
 };
 
 const Registr = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const isAuth = useAppSelector(checkIsAuth);
@@ -38,29 +40,29 @@ const Registr = () => {
       <div className="card-body py-5 px-md-5">
         <div className=" row d-flex justify-content-center">
           <div className="auth">
-            <h2 className="fw-bold mb-5">Sign up</h2>
+            <h2 className="fw-bold mb-5">{t('Sign up')}</h2>
             <Form onSubmit={handleSubmit(onSubmit)}>
               <Form.Group className="mb-3">
                 <Form.Control
                   type="text"
-                  placeholder="Enter username"
+                  placeholder={t('Enter username') as string}
                   {...register('username', { required: true, minLength: 3 })}
                   autoComplete="off"
                   isInvalid={!!errors.username}
                 />
                 {errors.username ? (
                   <span style={{ color: 'red' }}>
-                    Username must be at least 3 characters long
+                    {t('Username must be at least 3 characters long')}
                   </span>
                 ) : (
-                  <span>Username</span>
+                  <span>{t('Username')}</span>
                 )}
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Control
                   type="email"
-                  placeholder="Enter e-mail"
+                  placeholder={t('Enter e-mail') as string}
                   {...register('email', {
                     required: true,
                   })}
@@ -68,7 +70,7 @@ const Registr = () => {
                   isInvalid={!!errors.email}
                 />
                 {errors.email ? (
-                  <span style={{ color: 'red' }}>Enter e-mail</span>
+                  <span style={{ color: 'red' }}> {t('Enter e-mail')}</span>
                 ) : (
                   <span>E-mail</span>
                 )}
@@ -77,25 +79,25 @@ const Registr = () => {
               <Form.Group className="mb-3">
                 <Form.Control
                   type="password"
-                  placeholder="Password"
+                  placeholder={t('Password') as string}
                   {...register('password', { required: true, minLength: 5 })}
                   isInvalid={!!errors.password}
                 />
                 {errors.password ? (
                   <span style={{ color: 'red' }}>
-                    Password must be at least 5 characters long
+                    {t('Password must be at least 5 characters long')}
                   </span>
                 ) : (
-                  <span>Password</span>
+                  <span>{t('Password')}</span>
                 )}
               </Form.Group>
               <Button variant="primary" type="submit" className="mb-4">
-                Sign up
+                {t('Sign up')}
               </Button>
               <p>
-                Already registered{' '}
+                {t('Already registered')}{' '}
                 <Link to="/login" className="text-decoration-none">
-                  sign in?
+                  {t('sign in?')}
                 </Link>
               </p>
             </Form>

@@ -4,6 +4,7 @@
 @import './components/mypage';
 @import './components/items';
 @import './components/homepage';
+@import './components/search';
 
 * {
   margin: 0;
@@ -30,6 +31,7 @@ body {
 
 table {
   min-width: 700px;
+  background-color: theme-color('dark');
 }
 
 .app {
@@ -57,14 +59,4 @@ table {
   .app {
     background-color: #3e3e42;
   }
-}
-
-.markfield {
-  p {
-    margin: 0;
-  }
-}
-
-.active {
-  font-weight: 700;
 }

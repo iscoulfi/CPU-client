@@ -1,15 +1,80 @@
 .home {
   h1 {
     font-size: 1.5rem;
+    padding: 10px 10px 0 10px;
   }
   .card_img {
     height: 250px;
     object-fit: cover;
   }
+  .card-text {
+    max-height: 100px;
+    overflow-y: auto;
+    &::-webkit-scrollbar {
+      width: 7px;
+      background-color: #f9f9fd;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #6d6d6d;
+    }
+    &::-webkit-scrollbar-track {
+      -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+      background-color: #f9f9fd;
+    }
+  }
+
+  .nameplate {
+    display: inline-block;
+    background-color: #dbdada;
+    border-radius: 7px 7px 0 0;
+    margin-left: 10px;
+    h1 {
+      margin: 0;
+    }
+  }
+  .list-group-item {
+    background-color: #f8f9fa;
+    color: #428bff;
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
+
   .tags {
-    background-color: #ffffff;
+    background-color: #f8f9fa;
     border-radius: 7px;
     padding: 5px;
     cursor: pointer;
+    .tag-cloud-tag:hover {
+      color: #000 !important;
+    }
+  }
+
+  .cards {
+    background-color: #f8f9fa;
+    border-radius: 7px;
+  }
+}
+
+:root[data-theme='dark'] {
+  .home {
+    .nameplate {
+      background-color: #212529;
+    }
+    .list-group-item {
+      background-color: #c9c8c8;
+      &:hover {
+        background-color: #b3b0b0;
+      }
+    }
+    .tags {
+      background-color: #c9c8c8;
+    }
+    .cards {
+      background-color: #c9c8c8;
+    }
+    .card {
+      background-color: #3e3e42;
+    }
   }
 }

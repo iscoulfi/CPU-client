@@ -8,6 +8,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../redux/store';
 import { createCollection } from '../../redux/slices/collection/asyncActions';
 import { topicOptions } from '../../assets/options';
+import { useTranslation } from 'react-i18next';
 import SimpleMDE from 'react-simplemde-editor';
 import MDE from 'easymde';
 import 'easymde/dist/easymde.min.css';
@@ -36,6 +37,7 @@ export const options = {
 } as MDE.Options;
 
 const AddColl = () => {
+  const { t } = useTranslation();
   const { userId } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -88,22 +90,22 @@ const AddColl = () => {
   };
 
   return (
-    <div className="container mb-5 mt-4">
-      <h1 className="form">Add collection</h1>
+    <div className="container mb-5 mt-4 my-page">
+      <h1 className="form">{t('Add collection')}</h1>
       <Form className="addcoll" onSubmit={handleSubmit(handleFormSubmit)}>
         <FileUploader
           handleChange={handleChange}
           name="file"
-          label="Upload image"
+          label={t('Upload image')}
           types={fileTypes}
           classes="drop_area"
         />
 
         <Form.Group className="mt-3 mb-2">
-          <Form.Label>Title</Form.Label>
+          <Form.Label>{t('Title')}</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter title"
+            placeholder={t('Enter title') as string}
             {...register('title', { required: true })}
             isInvalid={!!errors.title}
           />
@@ -113,11 +115,11 @@ const AddColl = () => {
           currentField={topic}
           setCurrentField={setTopic}
           options={topicOptions}
-          label={'Topic'}
+          label={t('Topic')}
         />
 
         <Form.Group>
-          <Form.Label>Description</Form.Label>
+          <Form.Label>{t('Description')}</Form.Label>
           <SimpleMDE
             value={value}
             onChange={onChange}
@@ -136,7 +138,9 @@ const AddColl = () => {
             <Form.Label>{f.replace(/\d/g, '')}</Form.Label>
             <Form.Control
               type="text"
-              placeholder={`Enter ${f.replace(/\d/g, '')} field name`}
+              placeholder={
+                t('Enter') + ` ${f.replace(/\d/g, '')} ` + t('field name')
+              }
               {...register(f, { required: true })}
               isInvalid={!!errors[f]}
               autoComplete="off"
@@ -149,10 +153,10 @@ const AddColl = () => {
           onClick={() => navigate(`/${userId}`)}
           className="mb-3 "
         >
-          Cancel
+          {t('Cancel')}
         </Button>
         <Button variant="primary" type="submit" className="mb-3 mx-2">
-          Submit
+          {t('Submit')}
         </Button>
       </Form>
     </div>

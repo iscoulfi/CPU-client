@@ -83,6 +83,7 @@ const Navibar = ({
               id="switch"
               checked={theme === 'dark'}
               onChange={toggleTheme}
+              className="mx-lg-2"
             />
 
             {isAuth ? (

@@ -1,0 +1,21 @@
+.searcher {
+  max-width: 700px;
+
+  .list-group-item {
+    background-color: #f8f9fa;
+    color: #428bff;
+    &:hover {
+      background-color: #f0f0f0;
+    }
+  }
+}
+:root[data-theme='dark'] {
+  .searcher {
+    .list-group-item {
+      background-color: #c9c8c8;
+      &:hover {
+        background-color: #b3b0b0;
+      }
+    }
+  }
+}

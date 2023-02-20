@@ -24,9 +24,6 @@ const itemSlice = createSlice({
   name: 'item',
   initialState,
   reducers: {
-    refreshItems: (state, action: PayloadAction<string>) => {
-      state.items = state.items.filter(c => c._id !== action.payload);
-    },
     setItem: (state, action: PayloadAction<ItemData>) => {
       state.item = action.payload;
     },
@@ -70,7 +67,7 @@ const itemSlice = createSlice({
     builder.addCase(removeItem.fulfilled, (state, action) => {
       if (action.payload) {
         state.status = Status.SUCCESS;
-        state.message = action.payload.message;
+        state.items = state.items.filter(c => c._id !== action.payload);
       }
     });
     builder.addCase(removeItem.rejected, (state, action) => {
@@ -80,5 +77,5 @@ const itemSlice = createSlice({
   },
 });
 
-export const { refreshItems, setItem } = itemSlice.actions;
+export const { setItem } = itemSlice.actions;
 export default itemSlice.reducer;

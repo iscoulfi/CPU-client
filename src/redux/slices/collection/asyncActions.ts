@@ -1,4 +1,3 @@
-import { MessageType } from './../auth/types';
 import {
   createCollectionParams,
   CollectionData,
@@ -6,7 +5,6 @@ import {
 } from './types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../../utils/axios';
-import { refreshCollections } from './slice';
 
 export const createCollection = createAsyncThunk(
   'collection/createCollection',
@@ -50,7 +48,10 @@ export const getCollection = createAsyncThunk(
 
 export const updateCollection = createAsyncThunk(
   'collection/updateCollection',
-  async ({ id, title, text, imgUrl, adFields }: updateCollectionParams) => {
+  async (
+    { id, title, text, imgUrl, adFields }: updateCollectionParams,
+    { dispatch }
+  ) => {
     try {
       const { data } = await axios.put<CollectionData>(`/collections/${id}`, {
         title,
@@ -58,6 +59,7 @@ export const updateCollection = createAsyncThunk(
         imgUrl,
         adFields,
       });
+      dispatch(getMyCollections(data.author));
       return data;
     } catch (error) {
       console.log(error);
@@ -67,10 +69,10 @@ export const updateCollection = createAsyncThunk(
 
 export const removeCollection = createAsyncThunk(
   'collection/removeCollection',
-  async (id: string, { dispatch }) => {
+  async (id: string) => {
     try {
-      const { data } = await axios.delete<MessageType>(`/collections/${id}`);
-      dispatch(refreshCollections(id));
+      const { data } = await axios.delete<string>(`/collections/${id}`);
+
       return data;
     } catch (error) {
       console.log(error);

@@ -1,14 +1,16 @@
-import MyColl from '../../components/MyPage/MyColl';
-import Button from 'react-bootstrap/Button';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useEffect, useState } from 'react';
 import { getMyCollections } from '../../redux/slices/collection/asyncActions';
 import { checkIsAdmin, checkIsAuth } from '../../redux/slices/auth/slice';
-import axios from '../../utils/axios';
 import { UsersData } from '../../redux/slices/admin/types';
+import { useTranslation } from 'react-i18next';
+import axios from '../../utils/axios';
+import MyColl from '../../components/MyPage/MyColl';
+import Button from 'react-bootstrap/Button';
 
 const MyPage = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const isAuth = useAppSelector(checkIsAuth);
   const isAdmin = useAppSelector(checkIsAdmin);
@@ -46,9 +48,9 @@ const MyPage = () => {
   }
 
   return (
-    <div>
+    <div className="my-page">
       <div className="text-center">
-        <h1 className="fs-4 my-3">
+        <h1 className="fs-4 my-3 fw-bold">
           {isAdmin ? owner?.username : user?.username}
         </h1>
         <Button
@@ -56,7 +58,7 @@ const MyPage = () => {
           className="mb-3"
           onClick={() => navigate(`/${userId}/addcoll`)}
         >
-          Add New Collection
+          {t('Add New Collection')}
         </Button>
       </div>
       <MyColl />

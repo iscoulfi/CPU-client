@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
@@ -7,6 +8,7 @@ interface AppointToolbarParams {
 }
 
 function Toolbar({ appointAdmin, checkedUserId }: AppointToolbarParams) {
+  const { t } = useTranslation();
   return (
     <ButtonGroup aria-label="Basic example" className="mb-3">
       <Button
@@ -15,7 +17,7 @@ function Toolbar({ appointAdmin, checkedUserId }: AppointToolbarParams) {
         onClick={() => appointAdmin(['admin'])}
         disabled={!checkedUserId}
       >
-        Admin
+        {t('Admin')}
       </Button>
       <Button
         size="sm"
@@ -24,7 +26,7 @@ function Toolbar({ appointAdmin, checkedUserId }: AppointToolbarParams) {
         onClick={() => appointAdmin(['user'])}
         disabled={!checkedUserId}
       >
-        User
+        {t('User')}
       </Button>
     </ButtonGroup>
   );

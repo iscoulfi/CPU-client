@@ -1,6 +1,6 @@
 import { Status, MessageType } from '../auth/types';
 import { CollectionSliceState } from './types';
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import {
   createCollection,
   getCollection,
@@ -19,13 +19,7 @@ const initialState: CollectionSliceState = {
 const collectionSlice = createSlice({
   name: 'collection',
   initialState,
-  reducers: {
-    refreshCollections: (state, action: PayloadAction<string>) => {
-      state.collections = state.collections.filter(
-        c => c._id !== action.payload
-      );
-    },
-  },
+  reducers: {},
 
   extraReducers: builder => {
     builder.addCase(createCollection.pending, state => {
@@ -65,7 +59,9 @@ const collectionSlice = createSlice({
     builder.addCase(removeCollection.fulfilled, (state, action) => {
       if (action.payload) {
         state.status = Status.SUCCESS;
-        state.message = action.payload.message;
+        state.collections = state.collections.filter(
+          c => c._id !== action.payload
+        );
       }
     });
     builder.addCase(removeCollection.rejected, (state, action) => {
@@ -105,5 +101,4 @@ const collectionSlice = createSlice({
   },
 });
 
-export const { refreshCollections } = collectionSlice.actions;
 export default collectionSlice.reducer;

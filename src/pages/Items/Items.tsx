@@ -31,7 +31,7 @@ const Items = () => {
   };
 
   return (
-    <div>
+    <div className="coll-items">
       {collection ? (
         <div className="items">
           <h1 className="mt-3 text-center">{`${collection.title} | ${collection.topic}`}</h1>

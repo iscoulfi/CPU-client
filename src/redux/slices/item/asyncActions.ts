@@ -1,8 +1,6 @@
-import { MessageType } from './../auth/types';
 import { ItemData, RemoveItemParams } from './types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../../utils/axios';
-import { refreshItems } from './slice';
 
 export const getCollectionItems = createAsyncThunk(
   'item/getCollectionItems',
@@ -27,12 +25,10 @@ export const getItem = createAsyncThunk('item/getItem', async (id: string) => {
 
 export const removeItem = createAsyncThunk(
   'item/removeItems',
-  async ({ collId, itemId }: RemoveItemParams, { dispatch }) => {
+  async ({ collId, itemId }: RemoveItemParams) => {
     try {
-      const { data } = await axios.delete<MessageType>(
-        `/items/${collId}/${itemId}`
-      );
-      dispatch(refreshItems(itemId));
+      const { data } = await axios.delete<string>(`/items/${collId}/${itemId}`);
+
       return data;
     } catch (error) {
       console.log(error);

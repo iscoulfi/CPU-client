@@ -1,5 +1,7 @@
 import { useAppSelector } from '../../redux/store';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useContext } from 'react';
+import { useTranslation } from 'react-i18next';
+import { ThemeContext } from '../../theme/ThemeContext';
 import Table from 'react-bootstrap/Table';
 
 type AdminTableParams = {
@@ -13,7 +15,9 @@ const AdminTable = ({
   activeCheckbox,
   setActiveCheckbox,
 }: AdminTableParams) => {
+  const { t } = useTranslation();
   const { users } = useAppSelector(state => state.admin);
+  const { theme } = useContext(ThemeContext);
 
   const activeUser = (ind: number, id: string) => {
     if (ind === activeCheckbox) {
@@ -24,15 +28,16 @@ const AdminTable = ({
       setCheckedUserId(id);
     }
   };
+
   return (
-    <Table striped responsive bordered hover>
+    <Table striped responsive bordered hover variant={theme}>
       <thead>
         <tr>
-          <th className="col-1">Action</th>
-          <th>Username</th>
-          <th>E-mail</th>
-          <th>Role</th>
-          <th>Status</th>
+          <th className="col-1">{t('Action')}</th>
+          <th>{t('Username')}</th>
+          <th>{t('E-mail')}</th>
+          <th>{t('Role')}</th>
+          <th>{t('Status')}</th>
         </tr>
       </thead>
       <tbody>

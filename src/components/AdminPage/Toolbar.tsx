@@ -1,7 +1,8 @@
-import Button from 'react-bootstrap/Button';
-import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { AiFillDelete } from 'react-icons/ai';
 import { TbLockOpen } from 'react-icons/tb';
+import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
+import ButtonGroup from 'react-bootstrap/ButtonGroup';
 
 interface ToolbarParams {
   cleaner: () => void;
@@ -10,6 +11,7 @@ interface ToolbarParams {
 }
 
 function Toolbar({ cleaner, block, checkedUserId }: ToolbarParams) {
+  const { t } = useTranslation();
   return (
     <ButtonGroup aria-label="Basic example" className="mb-2">
       <Button
@@ -17,7 +19,7 @@ function Toolbar({ cleaner, block, checkedUserId }: ToolbarParams) {
         onClick={() => block('blocked')}
         disabled={!checkedUserId}
       >
-        Block
+        {t('Block')}
       </Button>
       <Button
         variant="success"

@@ -1,33 +1,55 @@
-.items {
-  h1 {
+.coll-items {
+  .items {
+    h1 {
+      font-size: 1.5rem;
+    }
+  }
+
+  .like {
+    svg {
+      width: 25px;
+      height: 25px;
+      cursor: pointer;
+    }
+  }
+
+  %comment {
+    margin: auto;
+    background-color: #fefefe;
+    border-radius: 7px;
+    max-width: 500px;
+  }
+
+  .comment_form {
+    @extend %comment;
+    padding: 20px 30px 10px;
+  }
+
+  .comment_card {
+    @extend %comment;
+    padding: 15px 30px;
+    p {
+      margin: 0;
+    }
+  }
+
+  .markfield {
+    p {
+      margin: 0;
+    }
+  }
+
+  .sorting {
+    width: 250px;
+  }
+
+  .additem {
+    max-width: 500px;
+    margin: auto;
+  }
+
+  .form {
     font-size: 1.5rem;
-  }
-}
-
-.like {
-  svg {
-    width: 25px;
-    height: 25px;
-    cursor: pointer;
-  }
-}
-
-%comment {
-  margin: auto;
-  background-color: #fefefe;
-  border-radius: 7px;
-  max-width: 500px;
-}
-
-.comment_form {
-  @extend %comment;
-  padding: 20px 30px 10px;
-}
-
-.comment_card {
-  @extend %comment;
-  padding: 15px 30px;
-  p {
-    margin: 0;
+    text-align: center;
   }
 }

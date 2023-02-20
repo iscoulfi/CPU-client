@@ -7,6 +7,7 @@ import {
 } from '../redux/slices/admin/asyncActions';
 import { Navigate, useNavigate } from 'react-router';
 import { checkIsAdmin } from '../redux/slices/auth/slice';
+import { useTranslation } from 'react-i18next';
 
 import AdminTable from '../components/AdminPage/AdminTable';
 import Toolbar from '../components/AdminPage/Toolbar';
@@ -14,10 +15,11 @@ import AppointButtons from '../components/AdminPage/AppointButtons';
 import Button from 'react-bootstrap/Button';
 
 const AdminPage = () => {
-  const [checkedUserId, setCheckedUserId] = useState('');
-  const [activeCheckbox, setActiveCheckbox] = useState<null | number>(null);
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const [checkedUserId, setCheckedUserId] = useState('');
+  const [activeCheckbox, setActiveCheckbox] = useState<null | number>(null);
   const isAdmin = useAppSelector(checkIsAdmin);
   const { socket } = useAppSelector(state => state.socket);
 
@@ -54,7 +56,7 @@ const AdminPage = () => {
   return (
     <div>
       <div className="text-center mb-2">
-        <h2 className="fw-bold mt-3 fs-4">Users</h2>
+        <h2 className="fw-bold mt-3 fs-4">{t('Users')}</h2>
         <div className="d-flex flex-column align-items-center">
           <div>
             <Button
@@ -65,7 +67,7 @@ const AdminPage = () => {
                 navigate(`/${checkedUserId}`);
               }}
             >
-              To page
+              {t('To page')}
             </Button>
             <AppointButtons
               appointAdmin={appointAdmin}

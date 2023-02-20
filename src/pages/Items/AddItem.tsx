@@ -8,13 +8,15 @@ import { options } from '../MyPage/AddColl';
 import 'easymde/dist/easymde.min.css';
 import { useCallback, useEffect, useState } from 'react';
 import { getCollection } from '../../redux/slices/collection/asyncActions';
+import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
 const AddItem = () => {
-  const { collId, itemId } = useParams();
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { collId, itemId } = useParams();
   const [text1, setText1] = useState('');
   const [text2, setText2] = useState('');
   const [text3, setText3] = useState('');
@@ -97,24 +99,24 @@ const AddItem = () => {
   }, [dispatch, collId]);
 
   return (
-    <div className="container mb-5 mt-4">
-      <h1 className="form">{isEditing ? 'Edit item' : 'Add item'}</h1>
-      <Form className="addcoll" onSubmit={handleSubmit(handleFormSubmit)}>
+    <div className="container mb-5 mt-4 coll-items">
+      <h1 className="form">{isEditing ? t('Edit item') : t('Add item')}</h1>
+      <Form className="additem" onSubmit={handleSubmit(handleFormSubmit)}>
         <Form.Group className="mt-3 mb-2">
-          <Form.Label>Title</Form.Label>
+          <Form.Label>{t('Title')}</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter title"
+            placeholder={t('Enter title') as string}
             {...register('title', { required: true })}
             isInvalid={!!errors.title}
             autoComplete="off"
           />
         </Form.Group>
         <Form.Group className="mt-2 mb-2">
-          <Form.Label>Tags</Form.Label>
+          <Form.Label>{t('Tags')}</Form.Label>
           <Form.Control
             type="text"
-            placeholder="Enter tags separated by spaces"
+            placeholder={t('Enter tags separated by spaces') as string}
             {...register('tags', { required: true })}
             isInvalid={!!errors.tags}
             autoComplete="off"
@@ -173,10 +175,10 @@ const AddItem = () => {
           onClick={() => navigate(`/personal/${collId}`)}
           className="my-3"
         >
-          Cancel
+          {t('Cancel')}
         </Button>
         <Button variant="primary" type="submit" className="my-3 mx-2">
-          Submit
+          {t('Submit')}
         </Button>
       </Form>
     </div>
