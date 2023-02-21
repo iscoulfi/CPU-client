@@ -4,13 +4,15 @@ import { getCollection } from '../../redux/slices/collection/asyncActions';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { removeItem } from '../../redux/slices/item/asyncActions';
 import { checkIsAdmin } from '../../redux/slices/auth/slice';
+import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import TableItems from '../../components/Items/TableItems';
 
 const Items = () => {
-  const { collId } = useParams();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { collId } = useParams();
   const isAdmin = useAppSelector(checkIsAdmin);
   const [checkedItemId, setCheckedItemId] = useState('');
   const [activeCheckbox, setActiveCheckbox] = useState<null | number>(null);
@@ -42,7 +44,7 @@ const Items = () => {
                   variant="outline-primary"
                   onClick={() => navigate(`/personal/${collId}/addItem`)}
                 >
-                  Add New Item
+                  {t('Add New Item')}
                 </Button>
               </div>
 
@@ -54,7 +56,7 @@ const Items = () => {
                     navigate(`/personal/${collId}/${checkedItemId}/edit`)
                   }
                 >
-                  Edit
+                  {t('Edit')}
                 </Button>
 
                 <Button
@@ -64,7 +66,7 @@ const Items = () => {
                     navigate(`/personal/${collId}/${checkedItemId}`)
                   }
                 >
-                  To item
+                  {t('To item')}
                 </Button>
 
                 <Button
@@ -72,7 +74,7 @@ const Items = () => {
                   disabled={!checkedItemId}
                   onClick={() => deleteItem(checkedItemId)}
                 >
-                  Delete
+                  {t('Delete')}
                 </Button>
               </div>
             </>
@@ -83,7 +85,7 @@ const Items = () => {
                 disabled={!checkedItemId}
                 onClick={() => navigate(`/personal/${collId}/${checkedItemId}`)}
               >
-                To item
+                {t('To item')}
               </Button>
             </div>
           )}

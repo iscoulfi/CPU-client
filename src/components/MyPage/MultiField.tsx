@@ -1,11 +1,12 @@
 import Select, { OnChangeValue } from 'react-select';
 import { IOption, IFields } from '../../types/appinterface';
-import { fields } from '../../assets/options';
+import { useFields } from '../../hooks/options';
 import { useTranslation } from 'react-i18next';
 import Form from 'react-bootstrap/Form';
 
 const Field = ({ currentFields, setCurrentFields }: IFields) => {
   const { t } = useTranslation();
+  const fields = useFields();
 
   const getValue = () =>
     currentFields

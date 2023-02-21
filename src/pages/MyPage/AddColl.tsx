@@ -7,7 +7,7 @@ import { CollInputs } from '../../types/appinterface';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../redux/store';
 import { createCollection } from '../../redux/slices/collection/asyncActions';
-import { topicOptions } from '../../assets/options';
+import { useTopicOptions } from '../../hooks/options';
 import { useTranslation } from 'react-i18next';
 import SimpleMDE from 'react-simplemde-editor';
 import MDE from 'easymde';
@@ -114,7 +114,7 @@ const AddColl = () => {
         <Field
           currentField={topic}
           setCurrentField={setTopic}
-          options={topicOptions}
+          options={useTopicOptions()}
           label={t('Topic')}
         />
 

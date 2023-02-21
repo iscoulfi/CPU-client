@@ -1,16 +1,4 @@
 .my-page {
-  .accordion-button {
-    background-color: #f8f9fa;
-    &:focus {
-      box-shadow: none;
-    }
-    padding-left: 70px;
-  }
-
-  .accordion-body {
-    background-color: #f2f2f2;
-  }
-
   .addcoll {
     max-width: 500px;
     margin: auto;
@@ -37,6 +25,18 @@
       justify-content: center;
     }
   }
+}
+
+.accordion-button {
+  background-color: #f8f9fa;
+  &:focus {
+    box-shadow: none;
+  }
+  padding-left: 50px;
+}
+
+.accordion-body {
+  background-color: #f2f2f2;
 }
 
 :root[data-theme='dark'] {

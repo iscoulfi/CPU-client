@@ -1,11 +1,20 @@
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { getCollectionItems } from '../../redux/slices/item/asyncActions';
 import { useParams } from 'react-router-dom';
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from 'react';
+import {
+  Dispatch,
+  SetStateAction,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
+import { useSortOptions } from '../../hooks/options';
+import { ThemeContext } from '../../theme/ThemeContext';
+import { useTranslation } from 'react-i18next';
 import Table from 'react-bootstrap/Table';
 import ReactMarkdown from 'react-markdown';
 import Field from '../../components/MyPage/Field';
-import { sortOptions } from '../../assets/options';
 
 type TableParams = {
   setCheckedItemId: Dispatch<SetStateAction<string>>;
@@ -18,8 +27,10 @@ const TableItems = ({
   activeCheckbox,
   setActiveCheckbox,
 }: TableParams) => {
-  const { collId } = useParams();
   const dispatch = useAppDispatch();
+  const { theme } = useContext(ThemeContext);
+  const { t } = useTranslation();
+  const { collId } = useParams();
   const { items } = useAppSelector(state => state.item);
   const { collection } = useAppSelector(state => state.collection);
   const [sort, setSort] = useState('dateAsc');
@@ -58,22 +69,22 @@ const TableItems = ({
 
   return (
     <div>
-      <div className="sorting ms-3">
+      <div className="sorting ms-3 mt-2 mt-sm-0">
         <Field
           currentField={sort}
           setCurrentField={setSort}
-          options={sortOptions}
-          label={'Sorted by:'}
+          options={useSortOptions()}
+          label={t('Sorted by:')}
         />
       </div>
 
-      <Table striped bordered hover responsive size="sm">
+      <Table striped bordered hover responsive size="sm" variant={theme}>
         <thead>
           <tr>
-            <th>Action</th>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Tags</th>
+            <th>{t('Action')}</th>
+            <th>id</th>
+            <th>{t('Name')}</th>
+            <th>{t('Tags')}</th>
             {collection?.adFields.map(el => (
               <th key={el[0]}>{el[1]}</th>
             ))}
@@ -96,11 +107,15 @@ const TableItems = ({
               </td>
               <td>{el._id}</td>
               <td>{el.title}</td>
-              <td>{el.tags.map(tag => `#${tag} `)}</td>
+              <td>
+                <div className="widen">{el.tags.map(tag => `#${tag} `)}</div>
+              </td>
               {collection?.adFields
                 .filter(el => !el[0].includes('text'))
                 .map(field => (
-                  <td key={field[0]}>{el[field[0]]}</td>
+                  <td key={field[0]}>
+                    <div className="widen">{el[field[0]]}</div>
+                  </td>
                 ))}
               {collection?.adFields
                 .filter(el => el[0].includes('text'))

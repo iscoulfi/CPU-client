@@ -1,7 +1,32 @@
 .coll-items {
-  .items {
-    h1 {
-      font-size: 1.5rem;
+  h1 {
+    font-size: 1.5rem;
+  }
+
+  .widen,
+  .markfield {
+    max-height: 100px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    &::-webkit-scrollbar {
+      width: 7px;
+      background-color: #f9f9fd;
+    }
+    &::-webkit-scrollbar-thumb {
+      background-color: #6d6d6d;
+    }
+    &::-webkit-scrollbar-track {
+      -webkit-box-shadow: 5px 5px 5px -5px rgba(34, 60, 80, 0.2) inset;
+      background-color: #f9f9fd;
+    }
+  }
+
+  .likes {
+    display: inline-block;
+    align-items: center;
+    padding-left: 5px;
+    p {
+      margin: 0;
     }
   }
 
@@ -51,5 +76,26 @@
   .form {
     font-size: 1.5rem;
     text-align: center;
+  }
+  .item_preview {
+    max-width: 800px;
+    background-color: #f8f9fa;
+    border-radius: 7px;
+    margin: 20px auto;
+  }
+  .accordion-button {
+    background-color: #ffffff;
+    padding-left: 20px;
+  }
+}
+
+:root[data-theme='dark'] {
+  .coll-items {
+    .item_preview,
+    .comment_form,
+    .comment_card {
+      background-color: #bdbdbd;
+      color: #000;
+    }
   }
 }
