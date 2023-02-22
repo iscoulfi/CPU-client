@@ -9,6 +9,7 @@ import { getItem } from '../../redux/slices/item/asyncActions';
 import { setItem } from '../../redux/slices/item/slice';
 import { getItemComments } from '../../redux/slices/comment/asyncActions';
 import { useTranslation } from 'react-i18next';
+import ClipLoader from 'react-spinners/ClipLoader';
 import Accordion from 'react-bootstrap/Accordion';
 import Button from 'react-bootstrap/Button';
 import Comments from '../../components/Items/Comments';
@@ -19,7 +20,7 @@ const Item = () => {
   const { t } = useTranslation();
   const { collId, itemId } = useParams();
   const { collection } = useAppSelector(state => state.collection);
-  const { item } = useAppSelector(state => state.item);
+  const { item, status } = useAppSelector(state => state.item);
   const { user } = useAppSelector(state => state.auth);
   const { socket } = useAppSelector(state => state.socket);
   const isLiked = Boolean(item.likes[user?._id as string]);
@@ -57,54 +58,62 @@ const Item = () => {
 
   return (
     <div className="coll-items">
-      <div className="item_preview shadow">
-        <div className="p-3">
-          <h1>{item.title}</h1>
-          <p>{item.tags.map(tag => `#${tag} `)}</p>
-          <div className="likes d-flex gap-1 mb-2">
-            <div onClick={setLike} className="like">
-              {isLiked ? <FcLike /> : <FcLikePlaceholder />}
-            </div>
-            <p>{likeCounter}</p>
-          </div>
-          <Button
-            variant="primary"
-            onClick={() => navigate(`/personal/${collId}`)}
-            size="sm"
-          >
-            {t('To collection')}
-          </Button>
+      {status === 'loading' ? (
+        <div className="text-center pt-5">
+          <ClipLoader color="#428bff" className="loader" />
         </div>
+      ) : (
+        <>
+          <div className="item_preview shadow">
+            <div className="p-3">
+              <h1>{item.title}</h1>
+              <p>{item.tags.map(tag => `#${tag} `)}</p>
+              <div className="likes d-flex gap-1 mb-2">
+                <div onClick={setLike} className="like">
+                  {isLiked ? <FcLike /> : <FcLikePlaceholder />}
+                </div>
+                <p>{likeCounter}</p>
+              </div>
+              <Button
+                variant="primary"
+                onClick={() => navigate(`/personal/${collId}`)}
+                size="sm"
+              >
+                {t('To collection')}
+              </Button>
+            </div>
 
-        <Accordion>
-          <Accordion.Item eventKey="0">
-            <Accordion.Header>{t('Additional Info')}</Accordion.Header>
-            <Accordion.Body>
-              {collection?.adFields
-                .filter(el => !el[0].includes('text'))
-                .map(el => (
-                  <div key={el[0]}>
-                    <span className="fw-bold">{el[1]}: </span>
-                    {item[el[0]]}
-                  </div>
-                ))}
-              {collection?.adFields
-                .filter(el => el[0].includes('text'))
-                .map(el => (
-                  <div key={el[0]}>
-                    <p className="fw-bold m-0">{el[1]}</p>
-                    <ReactMarkdown children={item[el[0]] as string} />
-                  </div>
-                ))}
-              {collection?.adFields.length === 0 && (
-                <p>{t('Unfortunately there is nothing here...')}</p>
-              )}
-            </Accordion.Body>
-          </Accordion.Item>
-        </Accordion>
-      </div>
+            <Accordion>
+              <Accordion.Item eventKey="0">
+                <Accordion.Header>{t('Additional Info')}</Accordion.Header>
+                <Accordion.Body>
+                  {collection?.adFields
+                    .filter(el => !el[0].includes('text'))
+                    .map(el => (
+                      <div key={el[0]}>
+                        <span className="fw-bold">{el[1]}: </span>
+                        {item[el[0]]}
+                      </div>
+                    ))}
+                  {collection?.adFields
+                    .filter(el => el[0].includes('text'))
+                    .map(el => (
+                      <div key={el[0]}>
+                        <p className="fw-bold m-0">{el[1]}</p>
+                        <ReactMarkdown children={item[el[0]] as string} />
+                      </div>
+                    ))}
+                  {collection?.adFields.length === 0 && (
+                    <p>{t('Unfortunately there is nothing here...')}</p>
+                  )}
+                </Accordion.Body>
+              </Accordion.Item>
+            </Accordion>
+          </div>
 
-      <Comments />
+          <Comments />
+        </>
+      )}
     </div>
   );
 };

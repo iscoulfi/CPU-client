@@ -20,6 +20,8 @@ import MultiField from '../../components/MyPage/MultiField';
 import SimpleMDE from 'react-simplemde-editor';
 import { options } from './AddColl';
 import 'easymde/dist/easymde.min.css';
+
+import ClipLoader from 'react-spinners/ClipLoader';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
@@ -30,7 +32,7 @@ const EditColl = () => {
   const params = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
-  const { collection } = useAppSelector(state => state.collection);
+  const { collection, status } = useAppSelector(state => state.collection);
   const [file, setFile] = useState<File | null>(null);
   const [value, setFValue] = useState('');
   const [currentFields, setCurrentFields] = useState<[] | string[]>([]);
@@ -110,63 +112,71 @@ const EditColl = () => {
   return (
     <div className="container mb-4 mt-4 my-page">
       <h1 className="form">{t('Edit collection')}</h1>
-      <Form className="addcoll">
-        <FileUploader
-          handleChange={handleChange}
-          name="file"
-          label={t('Change image (optional)')}
-          types={fileTypes}
-          classes="drop_area"
-        />
-        <Form.Group className="my-3">
-          <Form.Label>{t('Title')}</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder={t('Change title (optional)') as string}
-            {...register('title')}
-          />
-        </Form.Group>
-
-        <Form.Group>
-          <Form.Label>{t('Description')}</Form.Label>
-          <SimpleMDE value={value} onChange={onChange} options={options} />
-        </Form.Group>
-
-        <MultiField
-          currentFields={currentFields}
-          setCurrentFields={setCurrentFields}
-        />
-
-        {currentFields.map(f => (
-          <Form.Group className="mb-3" key={f}>
-            <Form.Label>{f.replace(/\d/g, '')}</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder={
-                t('Enter') + ` ${f.replace(/\d/g, '')} ` + t('field name')
-              }
-              {...register(f, { required: true })}
-              isInvalid={!!errors[f]}
-              autoComplete="off"
+      {status === 'loading' ? (
+        <div className="text-center pt-5">
+          <ClipLoader color="#428bff" className="loader" />
+        </div>
+      ) : (
+        <>
+          <Form className="addcoll">
+            <FileUploader
+              handleChange={handleChange}
+              name="file"
+              label={t('Change image (optional)')}
+              types={fileTypes}
+              classes="drop_area"
             />
-          </Form.Group>
-        ))}
+            <Form.Group className="my-3">
+              <Form.Label>{t('Title')}</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder={t('Change title (optional)') as string}
+                {...register('title')}
+              />
+            </Form.Group>
 
-        <Button
-          variant="secondary"
-          onClick={() => navigate(`/${collection?.author}`)}
-          className="my-3 "
-        >
-          {t('Cancel')}
-        </Button>
-        <Button
-          variant="primary"
-          onClick={handleSubmit(handleFormSubmit)}
-          className="my-3 mx-2"
-        >
-          {t('Save changes')}
-        </Button>
-      </Form>
+            <Form.Group>
+              <Form.Label>{t('Description')}</Form.Label>
+              <SimpleMDE value={value} onChange={onChange} options={options} />
+            </Form.Group>
+
+            <MultiField
+              currentFields={currentFields}
+              setCurrentFields={setCurrentFields}
+            />
+
+            {currentFields.map(f => (
+              <Form.Group className="mb-3" key={f}>
+                <Form.Label>{f.replace(/\d/g, '')}</Form.Label>
+                <Form.Control
+                  type="text"
+                  placeholder={
+                    t('Enter') + ` ${f.replace(/\d/g, '')} ` + t('field name')
+                  }
+                  {...register(f, { required: true })}
+                  isInvalid={!!errors[f]}
+                  autoComplete="off"
+                />
+              </Form.Group>
+            ))}
+
+            <Button
+              variant="secondary"
+              onClick={() => navigate(`/${collection?.author}`)}
+              className="my-3 "
+            >
+              {t('Cancel')}
+            </Button>
+            <Button
+              variant="primary"
+              onClick={handleSubmit(handleFormSubmit)}
+              className="my-3 mx-2"
+            >
+              {t('Save changes')}
+            </Button>
+          </Form>
+        </>
+      )}
     </div>
   );
 };

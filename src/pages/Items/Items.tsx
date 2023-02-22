@@ -7,6 +7,7 @@ import { checkIsAdmin } from '../../redux/slices/auth/slice';
 import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import TableItems from '../../components/Items/TableItems';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 const Items = () => {
   const dispatch = useAppDispatch();
@@ -17,7 +18,7 @@ const Items = () => {
   const [checkedItemId, setCheckedItemId] = useState('');
   const [activeCheckbox, setActiveCheckbox] = useState<null | number>(null);
 
-  const { collection } = useAppSelector(state => state.collection);
+  const { collection, status } = useAppSelector(state => state.collection);
   const { user } = useAppSelector(state => state.auth);
 
   useEffect(() => {
@@ -34,7 +35,7 @@ const Items = () => {
 
   return (
     <div className="coll-items">
-      {collection ? (
+      {status !== 'loading' && collection ? (
         <div className="items">
           <h1 className="mt-3 text-center">{`${collection.title} | ${collection.topic}`}</h1>
           {user?._id === collection.author || isAdmin ? (
@@ -97,7 +98,9 @@ const Items = () => {
           />
         </div>
       ) : (
-        <span>loading...</span>
+        <div className="text-center pt-5">
+          <ClipLoader color="#428bff" className="loader" />
+        </div>
       )}
     </div>
   );

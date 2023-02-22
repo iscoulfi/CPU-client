@@ -14,6 +14,7 @@ export type ItemPreview = {
 const MainLayout = () => {
   const [items, setItems] = useState<[] | ItemPreview[]>([]);
   const [searchValue, setSearchValue] = useState('');
+  const [loading, setLoading] = useState(true);
 
   // eslint-disable-next-line
   const updateSearchItems = useCallback(
@@ -21,6 +22,7 @@ const MainLayout = () => {
       try {
         const { data } = await axios.get(`/items?search=${str}`);
         setItems(data);
+        setLoading(false);
       } catch (e) {
         console.log(e);
       }
@@ -35,7 +37,7 @@ const MainLayout = () => {
         setSearchValue={setSearchValue}
         updateSearchItems={updateSearchItems}
       />
-      <Outlet context={{ items, setSearchValue, updateSearchItems }} />
+      <Outlet context={{ items, setSearchValue, updateSearchItems, loading }} />
     </>
   );
 };

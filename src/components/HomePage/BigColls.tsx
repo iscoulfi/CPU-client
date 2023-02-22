@@ -7,17 +7,20 @@ import axios from '../../utils/axios';
 
 import Button from 'react-bootstrap/Button';
 import Card from 'react-bootstrap/Card';
+import BigCollsLoader from '../Loaders/BigCollsLoader';
 
 const BigColls = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [colls, setColls] = useState<CollectionData[] | []>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       try {
         const { data } = await axios.get('/collections');
         setColls(data);
+        setLoading(false);
       } catch (e) {
         console.log(e);
       }
@@ -31,33 +34,37 @@ const BigColls = () => {
       </div>
       <div className="cards pt-4">
         <div className="d-flex flex-wrap justify-content-center">
-          {colls.map(coll => {
-            return (
-              <Card
-                style={{ width: '20rem' }}
-                key={coll._id}
-                className="mb-4 mx-md-3"
-              >
-                <Card.Img
-                  variant="top"
-                  src={coll.imgUrl ? coll.imgUrl : './img/placeholder.jpg'}
-                  className="card_img"
-                />
-                <Card.Body>
-                  <Card.Title className="fw-bold">{`${coll.title} | ${coll.topic}`}</Card.Title>
-                  <div className="card-text">
-                    {<ReactMarkdown children={coll.text} />}
-                  </div>
-                  <Button
-                    variant="primary"
-                    onClick={() => navigate(`/personal/${coll._id}`)}
-                  >
-                    {t('To collection')}
-                  </Button>
-                </Card.Body>
-              </Card>
-            );
-          })}
+          {loading ? (
+            <BigCollsLoader />
+          ) : (
+            colls.map(coll => {
+              return (
+                <Card
+                  style={{ width: '20rem' }}
+                  key={coll._id}
+                  className="mb-4 mx-md-3"
+                >
+                  <Card.Img
+                    variant="top"
+                    src={coll.imgUrl ? coll.imgUrl : './img/placeholder.jpg'}
+                    className="card_img"
+                  />
+                  <Card.Body>
+                    <Card.Title className="fw-bold">{`${coll.title} | ${coll.topic}`}</Card.Title>
+                    <div className="card-text">
+                      {<ReactMarkdown children={coll.text} />}
+                    </div>
+                    <Button
+                      variant="primary"
+                      onClick={() => navigate(`/personal/${coll._id}`)}
+                    >
+                      {t('To collection')}
+                    </Button>
+                  </Card.Body>
+                </Card>
+              );
+            })
+          )}
         </div>
       </div>
     </div>

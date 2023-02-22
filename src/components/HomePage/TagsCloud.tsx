@@ -4,6 +4,7 @@ import { TagCloud } from 'react-tagcloud';
 import { useOutletProps } from '../../hooks/useOutletProps';
 import { useTranslation } from 'react-i18next';
 import axios from '../../utils/axios';
+import TagLoader from '../Loaders/TagLoader';
 
 interface ITag {
   value: string;
@@ -16,10 +17,11 @@ const options = {
 };
 
 const TagsCloud = () => {
-  const [tags, setTags] = useState([]);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { setSearchValue, updateSearchItems } = useOutletProps();
+  const [tags, setTags] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const tagsData = useMemo(
     () =>
@@ -37,6 +39,7 @@ const TagsCloud = () => {
       try {
         const { data } = await axios.get('/items/tags/last');
         setTags(data);
+        setLoading(false);
       } catch (e) {
         console.log(e);
       }
@@ -54,13 +57,17 @@ const TagsCloud = () => {
         <h1>{t('Tag cloud')}</h1>
       </div>
       <div className="tags">
-        <TagCloud
-          minSize={16}
-          maxSize={24}
-          colorOptions={options}
-          tags={tagsData}
-          onClick={(tag: ITag) => searchByTag(tag.value)}
-        />
+        {loading ? (
+          <TagLoader />
+        ) : (
+          <TagCloud
+            minSize={16}
+            maxSize={24}
+            colorOptions={options}
+            tags={tagsData}
+            onClick={(tag: ITag) => searchByTag(tag.value)}
+          />
+        )}
       </div>
     </div>
   );

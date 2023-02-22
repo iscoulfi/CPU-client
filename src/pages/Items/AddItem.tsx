@@ -9,6 +9,7 @@ import 'easymde/dist/easymde.min.css';
 import { useCallback, useEffect, useState } from 'react';
 import { getCollection } from '../../redux/slices/collection/asyncActions';
 import { useTranslation } from 'react-i18next';
+import ClipLoader from 'react-spinners/ClipLoader';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
@@ -21,7 +22,7 @@ const AddItem = () => {
   const [text2, setText2] = useState('');
   const [text3, setText3] = useState('');
 
-  const { collection } = useAppSelector(state => state.collection);
+  const { collection, status } = useAppSelector(state => state.collection);
 
   const isEditing = Boolean(itemId);
   //try to fix
@@ -101,86 +102,110 @@ const AddItem = () => {
   return (
     <div className="container mb-5 mt-4 coll-items">
       <h1 className="form">{isEditing ? t('Edit item') : t('Add item')}</h1>
-      <Form className="additem" onSubmit={handleSubmit(handleFormSubmit)}>
-        <Form.Group className="mt-3 mb-2">
-          <Form.Label>{t('Title')}</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder={t('Enter title') as string}
-            {...register('title', { required: true })}
-            isInvalid={!!errors.title}
-            autoComplete="off"
-          />
-        </Form.Group>
-        <Form.Group className="mt-2 mb-2">
-          <Form.Label>{t('Tags')}</Form.Label>
-          <Form.Control
-            type="text"
-            placeholder={t('Enter tags separated by spaces') as string}
-            {...register('tags', { required: true })}
-            isInvalid={!!errors.tags}
-            autoComplete="off"
-          />
-        </Form.Group>
-
-        {collection?.adFields
-          .filter(
-            el =>
-              !el[0].replace(/\d/g, '').includes('text') &&
-              !el[0].replace(/\d/g, '').includes('checkbox')
-          )
-          .map(el => (
-            <Form.Group className="mb-3" controlId="formBasicEmail" key={el[0]}>
-              <Form.Label>{el[1]}</Form.Label>
+      {status === 'loading' ? (
+        <div className="text-center pt-5">
+          <ClipLoader color="#428bff" className="loader" />
+        </div>
+      ) : (
+        <>
+          <Form className="additem" onSubmit={handleSubmit(handleFormSubmit)}>
+            <Form.Group className="mt-3 mb-2">
+              <Form.Label>{t('Title')}</Form.Label>
               <Form.Control
-                placeholder={el[1]}
-                type={el[0].replace(/\d/g, '')}
+                type="text"
+                placeholder={t('Enter title') as string}
+                {...register('title', { required: true })}
+                isInvalid={!!errors.title}
                 autoComplete="off"
-                {...register(el[0])}
               />
             </Form.Group>
-          ))}
-
-        {collection?.adFields
-          .filter(el => el[0].replace(/\d/g, '').includes('checkbox'))
-          .map(el => (
-            <Form.Group className="mb-3" controlId="formBasicEmail" key={el[0]}>
-              <Form.Check type="checkbox" label={el[1]} {...register(el[0])} />
-            </Form.Group>
-          ))}
-
-        {collection?.adFields
-          .filter(el => el[0].replace(/\d/g, '').includes('text'))
-          .map(el => (
-            <Form.Group key={el[0]}>
-              <Form.Label>{el[1]}</Form.Label>
-              <SimpleMDE
-                value={
-                  el[0] === 'text1' ? text1 : el[0] === 'text2' ? text2 : text3
-                }
-                onChange={
-                  el[0] === 'text1'
-                    ? onChange1
-                    : el[0] === 'text2'
-                    ? onChange2
-                    : onChange3
-                }
-                options={options}
+            <Form.Group className="mt-2 mb-2">
+              <Form.Label>{t('Tags')}</Form.Label>
+              <Form.Control
+                type="text"
+                placeholder={t('Enter tags separated by spaces') as string}
+                {...register('tags', { required: true })}
+                isInvalid={!!errors.tags}
+                autoComplete="off"
               />
             </Form.Group>
-          ))}
 
-        <Button
-          variant="secondary"
-          onClick={() => navigate(`/personal/${collId}`)}
-          className="my-3"
-        >
-          {t('Cancel')}
-        </Button>
-        <Button variant="primary" type="submit" className="my-3 mx-2">
-          {t('Submit')}
-        </Button>
-      </Form>
+            {collection?.adFields
+              .filter(
+                el =>
+                  !el[0].replace(/\d/g, '').includes('text') &&
+                  !el[0].replace(/\d/g, '').includes('checkbox')
+              )
+              .map(el => (
+                <Form.Group
+                  className="mb-3"
+                  controlId="formBasicEmail"
+                  key={el[0]}
+                >
+                  <Form.Label>{el[1]}</Form.Label>
+                  <Form.Control
+                    placeholder={el[1]}
+                    type={el[0].replace(/\d/g, '')}
+                    autoComplete="off"
+                    {...register(el[0])}
+                  />
+                </Form.Group>
+              ))}
+
+            {collection?.adFields
+              .filter(el => el[0].replace(/\d/g, '').includes('checkbox'))
+              .map(el => (
+                <Form.Group
+                  className="mb-3"
+                  controlId="formBasicEmail"
+                  key={el[0]}
+                >
+                  <Form.Check
+                    type="checkbox"
+                    label={el[1]}
+                    {...register(el[0])}
+                  />
+                </Form.Group>
+              ))}
+
+            {collection?.adFields
+              .filter(el => el[0].replace(/\d/g, '').includes('text'))
+              .map(el => (
+                <Form.Group key={el[0]}>
+                  <Form.Label>{el[1]}</Form.Label>
+                  <SimpleMDE
+                    value={
+                      el[0] === 'text1'
+                        ? text1
+                        : el[0] === 'text2'
+                        ? text2
+                        : text3
+                    }
+                    onChange={
+                      el[0] === 'text1'
+                        ? onChange1
+                        : el[0] === 'text2'
+                        ? onChange2
+                        : onChange3
+                    }
+                    options={options}
+                  />
+                </Form.Group>
+              ))}
+
+            <Button
+              variant="secondary"
+              onClick={() => navigate(`/personal/${collId}`)}
+              className="my-3"
+            >
+              {t('Cancel')}
+            </Button>
+            <Button variant="primary" type="submit" className="my-3 mx-2">
+              {t('Submit')}
+            </Button>
+          </Form>
+        </>
+      )}
     </div>
   );
 };

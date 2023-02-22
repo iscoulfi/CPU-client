@@ -4,48 +4,56 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import ListGroup from 'react-bootstrap/ListGroup';
 import axios from '../../utils/axios';
+import LastItemsLoader from '../Loaders/LastItemsLoader';
 
 function LastItems() {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [items, setItems] = useState<ItemPreview[] | []>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
       try {
         const { data } = await axios.get('/items');
         setItems(data);
+        setLoading(false);
       } catch (e) {
         console.log(e);
       }
     })();
   }, []);
+
   return (
     <div className="mt-4">
       <div className="nameplate">
         <h1>{t('Last items')}</h1>
       </div>
       <ListGroup>
-        {items.map(item => {
-          return (
-            <ListGroup.Item
-              action
-              key={item._id}
-              className="d-flex justify-content-between"
-              onClick={() => {
-                navigate(`/personal/${item.coll}/${item._id}`);
-              }}
-            >
-              <div className="fw-bold">{item.title}</div>
+        {loading ? (
+          <LastItemsLoader />
+        ) : (
+          items.map(item => {
+            return (
+              <ListGroup.Item
+                action
+                key={item._id}
+                className="d-flex justify-content-between"
+                onClick={() => {
+                  navigate(`/personal/${item.coll}/${item._id}`);
+                }}
+              >
+                <div className="fw-bold">{item.title}</div>
 
-              <div>
-                <span className="text-secondary">
-                  {new Date(item.createdAt).toLocaleString()}
-                </span>
-              </div>
-            </ListGroup.Item>
-          );
-        })}
+                <div>
+                  <span className="text-secondary">
+                    {new Date(item.createdAt).toLocaleString()}
+                  </span>
+                </div>
+              </ListGroup.Item>
+            );
+          })
+        )}
       </ListGroup>
     </div>
   );

@@ -7,6 +7,7 @@ type ContextType = {
   items: [] | ItemPreview[];
   setSearchValue: Dispatch<SetStateAction<string>>;
   updateSearchItems: DebouncedFunc<(str: string) => Promise<void>>;
+  loading: boolean;
 };
 
 export const useOutletProps = () => {
