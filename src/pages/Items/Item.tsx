@@ -54,7 +54,7 @@ const Item = () => {
       });
       return () => socket.off('refresh-comments');
     }
-  }, [socket, dispatch, itemId]);
+  }, [socket, dispatch]);
 
   return (
     <div className="coll-items">

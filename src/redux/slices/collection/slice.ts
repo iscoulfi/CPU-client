@@ -5,7 +5,6 @@ import {
   createCollection,
   getCollection,
   getMyCollections,
-  removeCollection,
   updateCollection,
 } from './asyncActions';
 
@@ -48,23 +47,6 @@ const collectionSlice = createSlice({
       }
     });
     builder.addCase(getMyCollections.rejected, (state, action) => {
-      state.message = (action.payload as MessageType).message;
-      state.status = Status.ERROR;
-    });
-
-    builder.addCase(removeCollection.pending, state => {
-      state.message = '';
-      state.status = Status.LOADING;
-    });
-    builder.addCase(removeCollection.fulfilled, (state, action) => {
-      if (action.payload) {
-        state.status = Status.SUCCESS;
-        state.collections = state.collections.filter(
-          c => c._id !== action.payload
-        );
-      }
-    });
-    builder.addCase(removeCollection.rejected, (state, action) => {
       state.message = (action.payload as MessageType).message;
       state.status = Status.ERROR;
     });

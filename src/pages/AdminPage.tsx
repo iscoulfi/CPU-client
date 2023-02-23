@@ -42,6 +42,7 @@ const AdminPage = () => {
 
   const appointAdmin = (roles: string[]) => {
     dispatch(updateUser({ prop: roles, userId: checkedUserId }));
+    socket.emit('change-role', checkedUserId);
     resetCheckbox();
   };
 

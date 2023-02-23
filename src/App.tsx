@@ -29,7 +29,7 @@ const socket = io(process.env.REACT_APP_SERVER as string);
 function App() {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { user, message, status } = useAppSelector(state => state.auth);
+  const { user, token, message, status } = useAppSelector(state => state.auth);
 
   useEffect(() => {
     dispatch(setSocket(socket));
@@ -38,8 +38,10 @@ function App() {
   useEffect(() => {
     if (user) {
       socket.emit('add-user', user._id);
+      window.localStorage.setItem('token', token);
+      window.localStorage.setItem('role', user.roles[0]);
     }
-  }, [user]);
+  }, [user, token]);
 
   useEffect(() => {
     dispatch(getMe());
@@ -66,8 +68,22 @@ function App() {
       socket.on('logout', () => {
         logoutUser();
       });
+      return () => {
+        socket.off('logout');
+      };
     }
   }, [logoutUser]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('refresh-role', () => {
+        dispatch(getMe());
+      });
+      return () => {
+        socket.off('refresh-role');
+      };
+    }
+  }, [dispatch]);
 
   return (
     <>

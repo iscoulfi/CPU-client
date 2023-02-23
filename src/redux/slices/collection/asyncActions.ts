@@ -8,11 +8,12 @@ import axios from '../../../utils/axios';
 
 export const createCollection = createAsyncThunk(
   'collection/createCollection',
-  async ({ ...params }: createCollectionParams) => {
+  async ({ ...params }: createCollectionParams, { dispatch }) => {
     try {
       const { data } = await axios.post<CollectionData>('/collections', {
         ...params,
       });
+      dispatch(getMyCollections(data.author));
       return data;
     } catch (error) {
       console.log(error);
@@ -69,11 +70,10 @@ export const updateCollection = createAsyncThunk(
 
 export const removeCollection = createAsyncThunk(
   'collection/removeCollection',
-  async (id: string) => {
+  async (id: string, { dispatch }) => {
     try {
-      const { data } = await axios.delete<string>(`/collections/${id}`);
-
-      return data;
+      const { data } = await axios.delete<CollectionData>(`/collections/${id}`);
+      dispatch(getMyCollections(data.author));
     } catch (error) {
       console.log(error);
     }

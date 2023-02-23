@@ -21,6 +21,7 @@ const AddItem = () => {
   const [text1, setText1] = useState('');
   const [text2, setText2] = useState('');
   const [text3, setText3] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const { collection, status } = useAppSelector(state => state.collection);
 
@@ -75,6 +76,7 @@ const AddItem = () => {
   }, [reset, itemId]);
 
   const handleFormSubmit: SubmitHandler<ItemInputs> = async values => {
+    setLoading(true);
     try {
       const fields = {
         ...values,
@@ -200,7 +202,12 @@ const AddItem = () => {
             >
               {t('Cancel')}
             </Button>
-            <Button variant="primary" type="submit" className="my-3 mx-2">
+            <Button
+              variant="primary"
+              type="submit"
+              className="my-3 mx-2"
+              disabled={loading}
+            >
               {t('Submit')}
             </Button>
           </Form>
