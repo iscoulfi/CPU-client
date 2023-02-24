@@ -24,12 +24,25 @@ export const getItem = createAsyncThunk('item/getItem', async (id: string) => {
 });
 
 export const removeItem = createAsyncThunk(
-  'item/removeItems',
+  'item/removeItem',
   async ({ collId, itemId }: RemoveItemParams, { dispatch }) => {
     try {
-      const { data } = await axios.delete<string>(`/items/${collId}/${itemId}`);
+      const { data } = await axios.delete<string>(
+        `/items/delete/${collId}/${itemId}`
+      );
 
       dispatch(getCollectionItems(data));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const removeAllItems = createAsyncThunk(
+  'item/removeAllItems',
+  async (collId: string) => {
+    try {
+      await axios.delete(`/items/remove/${collId}`);
     } catch (error) {
       console.log(error);
     }

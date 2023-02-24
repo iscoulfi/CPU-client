@@ -17,6 +17,16 @@ export interface updateCollectionParams {
   adFields: [string, string][];
 }
 
+export interface removeCollectionParams {
+  id: string;
+  url: string;
+}
+
+export interface removeAllCollectionsParams {
+  id: string;
+  urls: string[];
+}
+
 export interface CollectionData {
   title: string;
   topic: string;

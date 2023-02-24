@@ -1,10 +1,7 @@
 import { useAppDispatch } from '../../redux/store';
 import { removeCollection } from '../../redux/slices/collection/asyncActions';
-import { storage } from '../../assets/firebase';
-import { deleteObject, ref } from 'firebase/storage';
 import { useNavigate } from 'react-router-dom';
 import { CollectionData } from '../../redux/slices/collection/types';
-import { removeItem } from '../../redux/slices/item/asyncActions';
 import { useTranslation } from 'react-i18next';
 import ReactMarkdown from 'react-markdown';
 import Accordion from 'react-bootstrap/Accordion';
@@ -22,30 +19,22 @@ const CollPriew = ({ collection, ind }: CollPreviewParams) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { _id, title, topic, imgUrl, text } = collection;
 
-  const deleteCollection = (id: string, url: string, items: string[]) => {
-    if (url) {
-      let fileRef = ref(storage, url);
-      deleteObject(fileRef);
-    }
-    items.forEach(i => dispatch(removeItem({ itemId: i, collId: id })));
-    dispatch(removeCollection(id));
+  const deleteCollection = (id: string, url: string) => {
+    dispatch(removeCollection({ id, url }));
   };
 
   return (
-    <Accordion.Item eventKey={`${ind}`} key={collection._id}>
-      <Accordion.Header>{`${collection.title} | ${collection.topic}`}</Accordion.Header>
+    <Accordion.Item eventKey={`${ind}`} key={_id}>
+      <Accordion.Header>{`${title} | ${topic}`}</Accordion.Header>
       <Accordion.Body>
         <Container>
           <Row>
             <Col sm={6} md={5} lg={4} xl={3} className="picture">
               <div>
                 <img
-                  src={
-                    collection.imgUrl
-                      ? collection.imgUrl
-                      : './img/placeholder.jpg'
-                  }
+                  src={imgUrl ? imgUrl : './img/placeholder.jpg'}
                   className="rounded coll_img"
                   alt=""
                 />
@@ -53,7 +42,7 @@ const CollPriew = ({ collection, ind }: CollPreviewParams) => {
             </Col>
             <Col>
               <div className="ms-4">
-                <ReactMarkdown children={collection.text} />
+                <ReactMarkdown children={text} />
               </div>
             </Col>
           </Row>
@@ -62,25 +51,19 @@ const CollPriew = ({ collection, ind }: CollPreviewParams) => {
               <div className="my-2 d-flex gap-2">
                 <Button
                   variant="primary"
-                  onClick={() => navigate(`/personal/${collection._id}/edit`)}
+                  onClick={() => navigate(`/personal/${_id}/edit`)}
                 >
                   {t('Edit')}
                 </Button>
                 <Button
                   variant="primary"
-                  onClick={() => navigate(`/personal/${collection._id}`)}
+                  onClick={() => navigate(`/personal/${_id}`)}
                 >
                   {t('To items')}
                 </Button>
                 <Button
                   variant="danger "
-                  onClick={() =>
-                    deleteCollection(
-                      collection._id,
-                      collection.imgUrl,
-                      collection.items
-                    )
-                  }
+                  onClick={() => deleteCollection(_id, imgUrl)}
                 >
                   {t('Delete')}
                 </Button>

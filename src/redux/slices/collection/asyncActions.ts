@@ -1,10 +1,15 @@
+import { removeAllItems } from '../item/asyncActions';
 import {
   createCollectionParams,
   CollectionData,
   updateCollectionParams,
+  removeCollectionParams,
+  removeAllCollectionsParams,
 } from './types';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios from '../../../utils/axios';
+import { storage } from '../../../assets/firebase';
+import { deleteObject, ref } from 'firebase/storage';
 
 export const createCollection = createAsyncThunk(
   'collection/createCollection',
@@ -70,10 +75,34 @@ export const updateCollection = createAsyncThunk(
 
 export const removeCollection = createAsyncThunk(
   'collection/removeCollection',
-  async (id: string, { dispatch }) => {
+  async ({ id, url }: removeCollectionParams, { dispatch }) => {
+    if (url) {
+      let fileRef = ref(storage, url);
+      deleteObject(fileRef);
+    }
     try {
-      const { data } = await axios.delete<CollectionData>(`/collections/${id}`);
+      const { data } = await axios.delete<CollectionData>(
+        `/collections/delete/${id}`
+      );
       dispatch(getMyCollections(data.author));
+      dispatch(removeAllItems(id));
+    } catch (error) {
+      console.log(error);
+    }
+  }
+);
+
+export const removeAllCollections = createAsyncThunk(
+  'collection/removeAllCollections',
+  async ({ id, urls }: removeAllCollectionsParams) => {
+    urls.forEach(url => {
+      if (url) {
+        let fileRef = ref(storage, url);
+        deleteObject(fileRef);
+      }
+    });
+    try {
+      await axios.delete(`/collections/remove/${id}`);
     } catch (error) {
       console.log(error);
     }
