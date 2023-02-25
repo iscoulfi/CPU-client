@@ -26,8 +26,8 @@ function Comments() {
 
   const sendComment = ({ comment }: Comment) => {
     try {
-      if (itemId && user) {
-        dispatch(createComment({ itemId, comment, author: user.username }));
+      if (itemId) {
+        dispatch(createComment({ itemId, comment }));
         socket.emit('refresh', itemId);
       }
       reset({ comment: '' });

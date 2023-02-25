@@ -3,7 +3,6 @@ import { Status } from '../auth/types';
 export type CreateCommentParams = {
   itemId: string;
   comment: string;
-  author: string;
 };
 
 export interface CommentSliceState {
