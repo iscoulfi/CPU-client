@@ -54,9 +54,11 @@ const Login = () => {
                 />
                 <Form.Label>{t('Password')}</Form.Label>
               </Form.Group>
+
               <Button variant="primary" type="submit" className="mb-4">
                 {t('Sign in')}
               </Button>
+
               <p>
                 {t("Don't have an account?")}{' '}
                 <Link to="/registr" className="text-decoration-none">

@@ -91,9 +91,11 @@ const Registr = () => {
                   <span>{t('Password')}</span>
                 )}
               </Form.Group>
+
               <Button variant="primary" type="submit" className="mb-4">
                 {t('Sign up')}
               </Button>
+
               <p>
                 {t('Already registered')}{' '}
                 <Link to="/login" className="text-decoration-none">

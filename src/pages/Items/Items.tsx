@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getCollection } from '../../redux/slices/collection/asyncActions';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { useTranslation } from 'react-i18next';
+import { getCollection } from '../../redux/slices/collection/asyncActions';
 import { removeItem } from '../../redux/slices/item/asyncActions';
 import { checkIsAdmin } from '../../redux/slices/auth/slice';
-import { useTranslation } from 'react-i18next';
 import Button from 'react-bootstrap/Button';
 import TableItems from '../../components/Items/TableItems';
 import ClipLoader from 'react-spinners/ClipLoader';

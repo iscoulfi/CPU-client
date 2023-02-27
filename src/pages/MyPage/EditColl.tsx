@@ -1,37 +1,37 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../../redux/store';
+import { useNavigate, useParams } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { FileUploader } from 'react-drag-drop-files';
 import { storage } from '../../assets/firebase';
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { CollInputs } from '../../types/appinterface';
+import { options } from './AddColl';
 import {
   ref,
   getDownloadURL,
   uploadBytes,
   deleteObject,
 } from 'firebase/storage';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { CollInputs } from '../../types/appinterface';
-import { useAppDispatch, useAppSelector } from '../../redux/store';
 import {
   getCollection,
   updateCollection,
 } from '../../redux/slices/collection/asyncActions';
-import { useNavigate, useParams } from 'react-router';
-import { useTranslation } from 'react-i18next';
-import MultiField from '../../components/MyPage/MultiField';
-import SimpleMDE from 'react-simplemde-editor';
-import { options } from './AddColl';
-import 'easymde/dist/easymde.min.css';
 
 import ClipLoader from 'react-spinners/ClipLoader';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
+import MultiField from '../../components/MyPage/MultiField';
+import SimpleMDE from 'react-simplemde-editor';
+import 'easymde/dist/easymde.min.css';
 
 const fileTypes = ['JPG', 'PNG'];
 
 const EditColl = () => {
   const { t } = useTranslation();
-  const params = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const params = useParams();
   const { collection, status } = useAppSelector(state => state.collection);
   const [file, setFile] = useState<File | null>(null);
   const [value, setFValue] = useState('');
@@ -126,6 +126,7 @@ const EditColl = () => {
               types={fileTypes}
               classes="drop_area"
             />
+
             <Form.Group className="my-3">
               <Form.Label>{t('Title')}</Form.Label>
               <Form.Control
@@ -167,6 +168,7 @@ const EditColl = () => {
             >
               {t('Cancel')}
             </Button>
+
             <Button
               variant="primary"
               onClick={handleSubmit(handleFormSubmit)}

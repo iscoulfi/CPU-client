@@ -70,6 +70,7 @@ const AdminPage = () => {
             >
               {t('To page')}
             </Button>
+
             <AppointButtons
               appointAdmin={appointAdmin}
               checkedUserId={checkedUserId}
@@ -83,6 +84,7 @@ const AdminPage = () => {
           />
         </div>
       </div>
+
       <AdminTable
         setCheckedUserId={setCheckedUserId}
         activeCheckbox={activeCheckbox}

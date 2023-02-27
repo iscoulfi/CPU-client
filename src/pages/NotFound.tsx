@@ -1,6 +1,6 @@
-import Button from 'react-bootstrap/Button';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
+import Button from 'react-bootstrap/Button';
 
 const NotFound = () => {
   const navigate = useNavigate();
@@ -8,6 +8,7 @@ const NotFound = () => {
   return (
     <div className="text-center">
       <h3 className="fw-bold mt-5 pt-5">{t('Page not found')}</h3>
+
       <Button
         variant="secondary"
         className="mb-5 mt-2"

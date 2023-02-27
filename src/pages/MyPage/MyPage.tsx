@@ -1,25 +1,25 @@
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../redux/store';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { getMyCollections } from '../../redux/slices/collection/asyncActions';
 import { checkIsAdmin, checkIsAuth } from '../../redux/slices/auth/slice';
 import { UsersData } from '../../redux/slices/admin/types';
-import { useTranslation } from 'react-i18next';
-import ClipLoader from 'react-spinners/ClipLoader';
 import axios from '../../utils/axios';
+import ClipLoader from 'react-spinners/ClipLoader';
 import MyColl from '../../components/MyPage/MyColl';
 import Button from 'react-bootstrap/Button';
 
 const MyPage = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { userId } = useParams();
   const isAuth = useAppSelector(checkIsAuth);
   const isAdmin = useAppSelector(checkIsAdmin);
-  const navigate = useNavigate();
   const { user } = useAppSelector(state => state.auth);
   const { status } = useAppSelector(state => state.collection);
   const admin = useAppSelector(state => state.admin);
-  const { userId } = useParams();
   const [owner, setOwner] = useState<null | UsersData>(null);
 
   useEffect(() => {

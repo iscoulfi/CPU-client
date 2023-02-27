@@ -27,6 +27,7 @@ const SearchItem = () => {
                 }}
               >
                 <div className="fw-bold h3">{item.title}</div>
+
                 <div>
                   <span className="text-secondary">
                     {new Date(item.createdAt).toLocaleString()}

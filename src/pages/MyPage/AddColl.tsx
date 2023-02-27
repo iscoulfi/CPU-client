@@ -1,21 +1,21 @@
 import { useCallback, useState } from 'react';
-import { FileUploader } from 'react-drag-drop-files';
-import { storage } from '../../assets/firebase';
-import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
-import { useForm, SubmitHandler } from 'react-hook-form';
-import { CollInputs } from '../../types/appinterface';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch } from '../../redux/store';
-import { createCollection } from '../../redux/slices/collection/asyncActions';
-import { useTopicOptions } from '../../hooks/options';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
-import SimpleMDE from 'react-simplemde-editor';
-import MDE from 'easymde';
-import 'easymde/dist/easymde.min.css';
+import { useTopicOptions } from '../../hooks/options';
+import { ref, getDownloadURL, uploadBytes } from 'firebase/storage';
+import { FileUploader } from 'react-drag-drop-files';
+import { storage } from '../../assets/firebase';
+import { createCollection } from '../../redux/slices/collection/asyncActions';
+import { CollInputs } from '../../types/appinterface';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Field from '../../components/MyPage/Field';
 import MultiField from '../../components/MyPage/MultiField';
+import SimpleMDE from 'react-simplemde-editor';
+import MDE from 'easymde';
+import 'easymde/dist/easymde.min.css';
 
 const fileTypes = ['JPG', 'PNG'];
 
@@ -38,9 +38,9 @@ export const options = {
 
 const AddColl = () => {
   const { t } = useTranslation();
-  const { userId } = useParams();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
+  const { userId } = useParams();
   const [file, setFile] = useState<File | null>(null);
   const [topic, setTopic] = useState('books');
   const [value, setValue] = useState(' ');
@@ -155,6 +155,7 @@ const AddColl = () => {
         >
           {t('Cancel')}
         </Button>
+
         <Button variant="primary" type="submit" className="mb-3 mx-2">
           {t('Submit')}
         </Button>
