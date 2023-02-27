@@ -81,11 +81,10 @@ export const removeCollection = createAsyncThunk(
       deleteObject(fileRef);
     }
     try {
-      const { data } = await axios.delete<CollectionData>(
-        `/collections/delete/${id}`
-      );
-      dispatch(getMyCollections(data.author));
+      const { data } = await axios.delete<string>(`/collections/delete/${id}`);
+
       dispatch(removeAllItems(id));
+      return data;
     } catch (error) {
       console.log(error);
     }

@@ -1,7 +1,7 @@
 import { ItemSliceState, ItemData } from './types';
 import { Status, MessageType } from '../auth/types';
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { getCollectionItems, getItem } from './asyncActions';
+import { getCollectionItems, getItem, removeItem } from './asyncActions';
 
 const initialItem = {
   _id: '',
@@ -56,6 +56,21 @@ const itemSlice = createSlice({
       }
     });
     builder.addCase(getItem.rejected, (state, action) => {
+      state.message = (action.payload as MessageType).message;
+      state.status = Status.ERROR;
+    });
+
+    builder.addCase(removeItem.pending, state => {
+      state.message = '';
+      state.status = Status.LOADING;
+    });
+    builder.addCase(removeItem.fulfilled, (state, action) => {
+      if (action.payload) {
+        state.status = Status.SUCCESS;
+        state.items = state.items.filter(c => c._id !== action.payload);
+      }
+    });
+    builder.addCase(removeItem.rejected, (state, action) => {
       state.message = (action.payload as MessageType).message;
       state.status = Status.ERROR;
     });

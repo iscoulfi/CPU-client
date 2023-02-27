@@ -25,13 +25,13 @@ export const getItem = createAsyncThunk('item/getItem', async (id: string) => {
 
 export const removeItem = createAsyncThunk(
   'item/removeItem',
-  async ({ collId, itemId }: RemoveItemParams, { dispatch }) => {
+  async ({ collId, itemId }: RemoveItemParams) => {
     try {
       const { data } = await axios.delete<string>(
         `/items/delete/${collId}/${itemId}`
       );
 
-      dispatch(getCollectionItems(data));
+      return data;
     } catch (error) {
       console.log(error);
     }
